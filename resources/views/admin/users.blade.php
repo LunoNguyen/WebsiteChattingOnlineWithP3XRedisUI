@@ -1,0 +1,120 @@
+@extends('layouts.app')
+@section('title', 'Quản lý người dùng')
+
+@section('content')
+<div class="flex-1 overflow-y-auto p-6 bg-gray-50">
+  <div class="max-w-5xl mx-auto">
+
+    {{-- Header & Stats --}}
+    <div class="grid grid-cols-4 gap-4 mb-6">
+      <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+        <p class="text-xs text-gray-500">Tổng người dùng</p>
+        <p class="text-2xl font-bold text-gray-900 mt-1">{{ $stats['total_users'] }}</p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+        <p class="text-xs text-gray-500">Đang online</p>
+        <p class="text-2xl font-bold text-green-500 mt-1">{{ $stats['online_count'] }}</p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+        <p class="text-xs text-gray-500">Redis keys</p>
+        <p class="text-2xl font-bold text-sky-500 mt-1">{{ number_format($stats['db_size']) }}</p>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+        <p class="text-xs text-gray-500">Memory Redis</p>
+        <p class="text-2xl font-bold text-purple-500 mt-1">{{ $stats['memory_used'] }}</p>
+      </div>
+    </div>
+
+    {{-- Alerts --}}
+    @if(session('success'))
+      <div class="mb-4 bg-green-50 border border-green-200 text-green-700 rounded-lg px-4 py-3 text-sm">✅ {{ session('success') }}</div>
+    @endif
+    @if(session('error'))
+      <div class="mb-4 bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">❌ {{ session('error') }}</div>
+    @endif
+
+    {{-- Admin nav --}}
+    <div class="flex gap-2 mb-4">
+      <a href="{{ route('admin.users') }}" class="bg-sky-500 text-white text-sm font-medium px-4 py-2 rounded-lg">👤 Người dùng</a>
+      <a href="{{ route('admin.backup') }}" class="bg-white border border-gray-200 text-gray-600 text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-50">💾 Backup</a>
+      <a href="{{ route('admin.logs') }}" class="bg-white border border-gray-200 text-gray-600 text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-50">📒 Logs</a>
+      <a href="{{ route('admin.redis_info') }}" class="bg-white border border-gray-200 text-gray-600 text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-50">🔴 Redis Info</a>
+    </div>
+
+    {{-- Users table --}}
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <table class="w-full">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Người dùng</th>
+            <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Email</th>
+            <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Role</th>
+            <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Trạng thái</th>
+            <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Online</th>
+            <th class="text-right px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Hành động</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          @foreach($allUsers as $user)
+          @if($user->status !== 'deleted')
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-sky-400 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
+                  {{ strtoupper(substr($user->getName(), 0, 1)) }}
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-900">{{ $user->getName() }}</p>
+                  <p class="text-xs text-gray-400">@{{ $user->username }}</p>
+                </div>
+              </div>
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-600">{{ $user->email }}</td>
+            <td class="px-4 py-3">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
+                {{ $user->role === 'admin' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-700' }}">
+                {{ $user->role === 'admin' ? '🛡️ Admin' : 'User' }}
+              </span>
+            </td>
+            <td class="px-4 py-3">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
+                {{ $user->status === 'active' ? 'bg-green-100 text-green-700'
+                  : ($user->status === 'banned' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-500') }}">
+                {{ ['active'=>'Hoạt động','banned'=>'Đã khóa','deleted'=>'Đã xóa'][$user->status] ?? $user->status }}
+              </span>
+            </td>
+            <td class="px-4 py-3">
+              @if(in_array($user->user_id, $onlineIds))
+                <span class="w-2 h-2 bg-green-400 rounded-full inline-block"></span>
+              @else
+                <span class="w-2 h-2 bg-gray-300 rounded-full inline-block"></span>
+              @endif
+            </td>
+            <td class="px-4 py-3 text-right">
+              @if($user->user_id !== $authUser->user_id && !$user->isAdmin())
+                @if($user->status === 'banned')
+                  <form method="POST" action="{{ route('admin.users.unban') }}" class="inline">
+                    @csrf
+                    <input type="hidden" name="user_id" value="{{ $user->user_id }}">
+                    <button class="text-xs bg-green-100 hover:bg-green-200 text-green-700 px-2.5 py-1.5 rounded-lg font-medium">Mở khóa</button>
+                  </form>
+                @else
+                  <form method="POST" action="{{ route('admin.users.ban') }}" class="inline">
+                    @csrf
+                    <input type="hidden" name="user_id" value="{{ $user->user_id }}">
+                    <button class="text-xs bg-red-100 hover:bg-red-200 text-red-700 px-2.5 py-1.5 rounded-lg font-medium">Khóa</button>
+                  </form>
+                @endif
+              @else
+                <span class="text-xs text-gray-300">—</span>
+              @endif
+            </td>
+          </tr>
+          @endif
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+@endsection
