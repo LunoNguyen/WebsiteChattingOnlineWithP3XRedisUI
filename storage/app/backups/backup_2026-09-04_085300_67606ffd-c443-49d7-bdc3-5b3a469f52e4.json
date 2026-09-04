@@ -1,0 +1,1058 @@
+{
+    "meta": {
+        "backup_id": "67606ffd-c443-49d7-bdc3-5b3a469f52e4",
+        "created_at": 1788511980049,
+        "created_by": "a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1",
+        "note": "backup trước khi xóa 1 vài tin nhắn",
+        "type": "full",
+        "total_keys": 114
+    },
+    "data": {
+        "user:session:57y5GqMN7C84IEmkwAvHNZ8jScQ7WBI6MR5G0DyyGGRyK8eVWDfzcjUdNGmCSwJ4": {
+            "type": "hash",
+            "value": {
+                "ip_address": "127.0.0.1",
+                "created_at": "1788507566819",
+                "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/152.0.0.0 Safari\/537.36",
+                "user_id": "1684f8da-d1b2-4ae5-9a9b-18c8b490d7d7"
+            }
+        },
+        "user:all": {
+            "type": "set",
+            "value": [
+                "cb5b9ab6-f1c3-45fd-84c6-f18ba7eea48f",
+                "a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1",
+                "c24d8b97-ca92-4cf8-9cc6-9ef5138fc9bf",
+                "c96f550c-6b8d-4fe8-8edc-872a5db74b46",
+                "1684f8da-d1b2-4ae5-9a9b-18c8b490d7d7",
+                "3572367b-5f4a-4f17-887b-aadda22aa84c",
+                "8aff873e-d0ca-45f3-b500-21b40da027a6",
+                "1d610548-b827-4cfd-982c-cda325d60566",
+                "230b5849-ff44-4e10-a2a6-ab0dd790ce92",
+                "506e7617-b019-4efe-9088-6407cd26cf05"
+            ]
+        },
+        "admin:backup:cd7f902d-87b6-4fd4-a101-a8223aabfd4c": {
+            "type": "hash",
+            "value": {
+                "status": "done",
+                "created_at": "1788510615240",
+                "note": "Backup test 04\/09",
+                "created_by": "a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1",
+                "type": "full",
+                "size_bytes": "0",
+                "backup_id": "cd7f902d-87b6-4fd4-a101-a8223aabfd4c",
+                "file_path": "C:\\laragon\\www\\chat-app\\storage\\app\/backups\/dump_cd7f902d-87b6-4fd4-a101-a8223aabfd4c.rdb"
+            }
+        },
+        "user:8aff873e-d0ca-45f3-b500-21b40da027a6:groups": {
+            "type": "set",
+            "value": [
+                "cc1aa4ac-5bce-4f5b-88f8-8da0c849d398",
+                "f88649d7-0b16-4abe-a9ef-32914ed6c3e6"
+            ]
+        },
+        "group:cc1aa4ac-5bce-4f5b-88f8-8da0c849d398:msgs": {
+            "type": "zset",
+            "value": {
+                "44664469-3868-4851-b671-bb290fe3a93e": "1788509345176"
+            }
+        },
+        "user:1684f8da-d1b2-4ae5-9a9b-18c8b490d7d7:unread": {
+            "type": "hash",
+            "value": {
+                "d330be59-4d38-477f-876e-a28729ed6c27": "0",
+                "cc1aa4ac-5bce-4f5b-88f8-8da0c849d398": "0"
+            }
+        },
+        "user:3572367b-5f4a-4f17-887b-aadda22aa84c:unread": {
+            "type": "hash",
+            "value": {
+                "c3330251-165b-49e1-b48d-1ea4e055bbea": "1",
+                "f88649d7-0b16-4abe-a9ef-32914ed6c3e6": "1"
+            }
+        },
+        "user:c24d8b97-ca92-4cf8-9cc6-9ef5138fc9bf:friends": {
+            "type": "set",
+            "value": [
+                "506e7617-b019-4efe-9088-6407cd26cf05"
+            ]
+        },
+        "user:idx:username:ccc": {
+            "type": "string",
+            "value": "1d610548-b827-4cfd-982c-cda325d60566"
+        },
+        "msg:2a1825d6-2e31-45cc-a2e1-b6b998a42c8b": {
+            "type": "hash",
+            "value": {
+                "msg_id": "2a1825d6-2e31-45cc-a2e1-b6b998a42c8b",
+                "conv_id": "69afbcab-6ffb-4be4-87b6-9b76a0d47784",
+                "conv_type": "dm",
+                "sender_id": "506e7617-b019-4efe-9088-6407cd26cf05",
+                "type": "text",
+                "content": "wtf (đã sửa)",
+                "reply_to": "",
+                "status": "edited",
+                "created_at": "1788510521470",
+                "edited_at": "1788510545092",
+                "original_content": "wtf"
+            }
+        },
+        "user:8aff873e-d0ca-45f3-b500-21b40da027a6:nicknames": {
+            "type": "hash",
+            "value": {
+                "3572367b-5f4a-4f17-887b-aadda22aa84c": "Thỏ Trắng"
+            }
+        },
+        "msg:78374ba4-8f1c-472c-8ae5-b0661dd5b1d9": {
+            "type": "hash",
+            "value": {
+                "msg_id": "78374ba4-8f1c-472c-8ae5-b0661dd5b1d9",
+                "conv_id": "dd4ec388-33d6-49cc-a728-c4bc6f30bcb0",
+                "conv_type": "dm",
+                "sender_id": "506e7617-b019-4efe-9088-6407cd26cf05",
+                "type": "text",
+                "content": "",
+                "reply_to": "",
+                "status": "deleted",
+                "created_at": "1788511277339",
+                "edited_at": "0",
+                "original_content": ""
+            }
+        },
+        "user:idx:email:npk@gmail.com": {
+            "type": "string",
+            "value": "1684f8da-d1b2-4ae5-9a9b-18c8b490d7d7"
+        },
+        "user:session:XJGs47K28NGXW5261A4VzXYmScxDjre9SZdwUDxilAHnoou1hUuM2Lopx8aQqDkK": {
+            "type": "hash",
+            "value": {
+                "ip_address": "127.0.0.1",
+                "created_at": "1788507440466",
+                "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/152.0.0.0 Safari\/537.36",
+                "user_id": "506e7617-b019-4efe-9088-6407cd26cf05"
+            }
+        },
+        "user:506e7617-b019-4efe-9088-6407cd26cf05": {
+            "type": "hash",
+            "value": {
+                "username": "luong",
+                "status": "active",
+                "bio": "",
+                "role": "user",
+                "last_seen": "1788511946938",
+                "avatar_url": "https:\/\/encrypted-tbn0.gstatic.com\/images?q=tbn:ANd9GcRXANVnmLXReZOiVfwE895osBAC7f3Tw82zt8HWytDu6A&s=10",
+                "created_at": "1788507440461",
+                "display_name": "Ngân Lượng",
+                "is_online": "0",
+                "password_hash": "$2y$10$AWLzxwwvDdhOoOHRiY4WJOcpmnXHh1GD6UAti52XampuEdAFHaKb.",
+                "email": "nnl@gmail.com",
+                "user_id": "506e7617-b019-4efe-9088-6407cd26cf05"
+            }
+        },
+        "user:idx:username:khanh": {
+            "type": "string",
+            "value": "1684f8da-d1b2-4ae5-9a9b-18c8b490d7d7"
+        },
+        "conv:d330be59-4d38-477f-876e-a28729ed6c27": {
+            "type": "hash",
+            "value": {
+                "conv_id": "d330be59-4d38-477f-876e-a28729ed6c27",
+                "user1_id": "1684f8da-d1b2-4ae5-9a9b-18c8b490d7d7",
+                "user2_id": "506e7617-b019-4efe-9088-6407cd26cf05",
+                "created_at": "1788507541362",
+                "last_msg_id": "9f3f9c66-2a8f-4e9f-8a03-fc066c0540aa",
+                "last_msg_at": "1788507545440"
+            }
+        },
+        "user:idx:username:bob": {
+            "type": "string",
+            "value": "3572367b-5f4a-4f17-887b-aadda22aa84c"
+        },
+        "user:idx:email:ccc@gmail.com": {
+            "type": "string",
+            "value": "1d610548-b827-4cfd-982c-cda325d60566"
+        },
+        "msg:2198a5b9-55ab-48a5-b059-79a30d4826d5": {
+            "type": "hash",
+            "value": {
+                "msg_id": "2198a5b9-55ab-48a5-b059-79a30d4826d5",
+                "conv_id": "69afbcab-6ffb-4be4-87b6-9b76a0d47784",
+                "conv_type": "dm",
+                "sender_id": "506e7617-b019-4efe-9088-6407cd26cf05",
+                "type": "text",
+                "content": "trả lời  anh lẹ",
+                "reply_to": "",
+                "status": "sent",
+                "created_at": "1788510414180",
+                "edited_at": "0",
+                "original_content": ""
+            }
+        },
+        "user:cb5b9ab6-f1c3-45fd-84c6-f18ba7eea48f:unread": {
+            "type": "hash",
+            "value": {
+                "f88649d7-0b16-4abe-a9ef-32914ed6c3e6": "2"
+            }
+        },
+        "user:a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1:unread": {
+            "type": "hash",
+            "value": {
+                "f88649d7-0b16-4abe-a9ef-32914ed6c3e6": "0"
+            }
+        },
+        "msg:607ef532-912d-4e02-8c75-2a7cfb7dd4bf": {
+            "type": "hash",
+            "value": {
+                "msg_id": "607ef532-912d-4e02-8c75-2a7cfb7dd4bf",
+                "conv_id": "69afbcab-6ffb-4be4-87b6-9b76a0d47784",
+                "conv_type": "dm",
+                "sender_id": "506e7617-b019-4efe-9088-6407cd26cf05",
+                "type": "text",
+                "content": "ê ku",
+                "reply_to": "",
+                "status": "sent",
+                "created_at": "1788510401949",
+                "edited_at": "0",
+                "original_content": ""
+            }
+        },
+        "user:1684f8da-d1b2-4ae5-9a9b-18c8b490d7d7:friends": {
+            "type": "set",
+            "value": [
+                "506e7617-b019-4efe-9088-6407cd26cf05"
+            ]
+        },
+        "user:506e7617-b019-4efe-9088-6407cd26cf05:unread": {
+            "type": "hash",
+            "value": {
+                "d330be59-4d38-477f-876e-a28729ed6c27": "0",
+                "cc1aa4ac-5bce-4f5b-88f8-8da0c849d398": "0",
+                "69afbcab-6ffb-4be4-87b6-9b76a0d47784": "0",
+                "dd4ec388-33d6-49cc-a728-c4bc6f30bcb0": "0"
+            }
+        },
+        "user:3572367b-5f4a-4f17-887b-aadda22aa84c": {
+            "type": "hash",
+            "value": {
+                "user_id": "3572367b-5f4a-4f17-887b-aadda22aa84c",
+                "username": "bob",
+                "display_name": "Bob Trần",
+                "password_hash": "$2y$10$Tb4MBfuNMjSqQ682g0eAl.F7m1j1H4p103IWp5uNH\/o6U09d13ZoG",
+                "email": "bob@chatapp.local",
+                "avatar_url": "",
+                "bio": "Chào mọi người!",
+                "status": "active",
+                "role": "user",
+                "last_seen": "1788508234404",
+                "created_at": "1788508234404",
+                "is_online": "0"
+            }
+        },
+        "group:f88649d7-0b16-4abe-a9ef-32914ed6c3e6": {
+            "type": "hash",
+            "value": {
+                "group_id": "f88649d7-0b16-4abe-a9ef-32914ed6c3e6",
+                "name": "Team NoSQL 🚀",
+                "avatar_url": "",
+                "owner_id": "8aff873e-d0ca-45f3-b500-21b40da027a6",
+                "description": "Nhóm học NoSQL với Redis",
+                "max_members": "50",
+                "created_at": "1788508234521",
+                "last_msg_at": "1788508234545"
+            }
+        },
+        "user:c24d8b97-ca92-4cf8-9cc6-9ef5138fc9bf:unread": {
+            "type": "hash",
+            "value": {
+                "dd4ec388-33d6-49cc-a728-c4bc6f30bcb0": "3"
+            }
+        },
+        "user:session:TxrTYU6sydQrrp8iSKbcyjr5OAaKtKqAteIWfb30OM1YYfPRdEG5JnUzy6RszZgh": {
+            "type": "hash",
+            "value": {
+                "ip_address": "2402:9d80:3b1:fc41:9561:a74b:4d02:2325",
+                "created_at": "1788510353458",
+                "user_agent": "Mozilla\/5.0 (Linux; Android 10; K) AppleWebKit\/537.36 (KHTML, like Gecko) SamsungBrowser\/30.0 Chrome\/143.0.0.0 Mobile Safari\/537.36",
+                "user_id": "230b5849-ff44-4e10-a2a6-ab0dd790ce92"
+            }
+        },
+        "user:1684f8da-d1b2-4ae5-9a9b-18c8b490d7d7:groups": {
+            "type": "set",
+            "value": [
+                "cc1aa4ac-5bce-4f5b-88f8-8da0c849d398"
+            ]
+        },
+        "user:506e7617-b019-4efe-9088-6407cd26cf05:friends": {
+            "type": "set",
+            "value": [
+                "c24d8b97-ca92-4cf8-9cc6-9ef5138fc9bf",
+                "230b5849-ff44-4e10-a2a6-ab0dd790ce92",
+                "1684f8da-d1b2-4ae5-9a9b-18c8b490d7d7",
+                "8aff873e-d0ca-45f3-b500-21b40da027a6"
+            ]
+        },
+        "user:online": {
+            "type": "set",
+            "value": [
+                "c24d8b97-ca92-4cf8-9cc6-9ef5138fc9bf",
+                "c96f550c-6b8d-4fe8-8edc-872a5db74b46",
+                "1684f8da-d1b2-4ae5-9a9b-18c8b490d7d7",
+                "1d610548-b827-4cfd-982c-cda325d60566",
+                "230b5849-ff44-4e10-a2a6-ab0dd790ce92",
+                "a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1"
+            ]
+        },
+        "user:8aff873e-d0ca-45f3-b500-21b40da027a6": {
+            "type": "hash",
+            "value": {
+                "user_id": "8aff873e-d0ca-45f3-b500-21b40da027a6",
+                "username": "alice",
+                "display_name": "Alice Nguyễn",
+                "password_hash": "$2y$10$.N.v1xSm0s3gADOO4Eidk.08h3ZcnAIQrD2mXUZ4LjPo.L9pbTP0u",
+                "email": "alice@chatapp.local",
+                "avatar_url": "",
+                "bio": "Xin chào! Tôi là Alice.",
+                "status": "active",
+                "role": "user",
+                "last_seen": "1788509385135",
+                "created_at": "1788508234343",
+                "is_online": "0"
+            }
+        },
+        "conv:c3330251-165b-49e1-b48d-1ea4e055bbea": {
+            "type": "hash",
+            "value": {
+                "conv_id": "c3330251-165b-49e1-b48d-1ea4e055bbea",
+                "user1_id": "3572367b-5f4a-4f17-887b-aadda22aa84c",
+                "user2_id": "8aff873e-d0ca-45f3-b500-21b40da027a6",
+                "created_at": "1788508234473",
+                "last_msg_id": "f02c91c0-935e-4866-b283-a048ee0d774b",
+                "last_msg_at": "1788508234518"
+            }
+        },
+        "user:session:GAEW7iZfYF3HgSOOKQcimYjTrpNKGyfF0qP4excT2Zpj1Eryb9BRt4GHEDb34zuh": {
+            "type": "hash",
+            "value": {
+                "ip_address": "127.0.0.1",
+                "created_at": "1788507586227",
+                "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/152.0.0.0 Safari\/537.36",
+                "user_id": "1684f8da-d1b2-4ae5-9a9b-18c8b490d7d7"
+            }
+        },
+        "user:1684f8da-d1b2-4ae5-9a9b-18c8b490d7d7:nicknames": {
+            "type": "hash",
+            "value": {
+                "506e7617-b019-4efe-9088-6407cd26cf05": "Lượng"
+            }
+        },
+        "user:idx:email:hihi@gmail.com": {
+            "type": "string",
+            "value": "c96f550c-6b8d-4fe8-8edc-872a5db74b46"
+        },
+        "user:session:pxntEHWTqEFLhJNFvquggwSgYFDGVqMEeOSQKY66XU3l78hd7gOMYyMYaJ56zQ1p": {
+            "type": "hash",
+            "value": {
+                "ip_address": "2401:d800:8c3:aeaf:4da3:c30d:313d:1655",
+                "created_at": "1788511194216",
+                "user_agent": "Mozilla\/5.0 (iPhone; CPU iPhone OS 26_6_1 like Mac OS X) AppleWebKit\/605.1.15 (KHTML, like Gecko) Mobile\/23G83 [FBAN\/FBIOS;FBAV\/576.0.0.31.108;FBBV\/1049580600;FBDV\/iPhone15,3;FBMD\/iPhone;FBSN\/iOS;FBSV\/26.6.1;FBSS\/3;FBCR\/;FBID\/phone;FBLC\/vi_GB;FBOP\/80]",
+                "user_id": "c24d8b97-ca92-4cf8-9cc6-9ef5138fc9bf"
+            }
+        },
+        "user:idx:email:admin@chatapp.local": {
+            "type": "string",
+            "value": "a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1"
+        },
+        "admin:backup:f4e395a3-3693-49b0-816a-80ca2f7919ff": {
+            "type": "hash",
+            "value": {
+                "status": "done",
+                "created_at": "1788511528962",
+                "note": "truoc khi xoa tin nhan",
+                "created_by": "a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1",
+                "type": "full",
+                "size_bytes": "0",
+                "backup_id": "f4e395a3-3693-49b0-816a-80ca2f7919ff",
+                "file_path": "C:\\laragon\\www\\chat-app\\storage\\app\/backups\/dump_f4e395a3-3693-49b0-816a-80ca2f7919ff.rdb"
+            }
+        },
+        "user:230b5849-ff44-4e10-a2a6-ab0dd790ce92:convs": {
+            "type": "zset",
+            "value": {
+                "69afbcab-6ffb-4be4-87b6-9b76a0d47784": "1788510584055"
+            }
+        },
+        "msg:b930348a-fd64-4833-adda-3c07acf50554": {
+            "type": "hash",
+            "value": {
+                "msg_id": "b930348a-fd64-4833-adda-3c07acf50554",
+                "conv_id": "f88649d7-0b16-4abe-a9ef-32914ed6c3e6",
+                "conv_type": "group",
+                "sender_id": "3572367b-5f4a-4f17-887b-aadda22aa84c",
+                "type": "text",
+                "content": "Sẵn sàng! Redis thật tuyệt vời 🔥",
+                "reply_to": "",
+                "status": "sent",
+                "created_at": "1788508234545",
+                "edited_at": "0",
+                "original_content": ""
+            }
+        },
+        "conv:69afbcab-6ffb-4be4-87b6-9b76a0d47784": {
+            "type": "hash",
+            "value": {
+                "conv_id": "69afbcab-6ffb-4be4-87b6-9b76a0d47784",
+                "user1_id": "230b5849-ff44-4e10-a2a6-ab0dd790ce92",
+                "user2_id": "506e7617-b019-4efe-9088-6407cd26cf05",
+                "created_at": "1788510399236",
+                "last_msg_id": "299065c7-65df-4f80-afeb-5e106194b767",
+                "last_msg_at": "1788510584055"
+            }
+        },
+        "msg:9f3f9c66-2a8f-4e9f-8a03-fc066c0540aa": {
+            "type": "hash",
+            "value": {
+                "msg_id": "9f3f9c66-2a8f-4e9f-8a03-fc066c0540aa",
+                "conv_id": "d330be59-4d38-477f-876e-a28729ed6c27",
+                "conv_type": "dm",
+                "sender_id": "506e7617-b019-4efe-9088-6407cd26cf05",
+                "type": "text",
+                "content": "alo ông",
+                "reply_to": "",
+                "status": "sent",
+                "created_at": "1788507545440",
+                "edited_at": "0",
+                "original_content": ""
+            }
+        },
+        "user:1684f8da-d1b2-4ae5-9a9b-18c8b490d7d7": {
+            "type": "hash",
+            "value": {
+                "user_id": "1684f8da-d1b2-4ae5-9a9b-18c8b490d7d7",
+                "username": "khanh",
+                "display_name": "Phi Khanh",
+                "password_hash": "$2y$10$9GnG2D\/FO73Ku3JqO0UAdu9K.MmGSX0nTSgTFxEeUAWEjzZx4Xy82",
+                "email": "npk@gmail.com",
+                "avatar_url": "",
+                "bio": "",
+                "status": "active",
+                "role": "user",
+                "last_seen": "1788510879420",
+                "created_at": "1788507471920",
+                "is_online": "1"
+            }
+        },
+        "user:idx:username:minhdzai": {
+            "type": "string",
+            "value": "c24d8b97-ca92-4cf8-9cc6-9ef5138fc9bf"
+        },
+        "group:f88649d7-0b16-4abe-a9ef-32914ed6c3e6:nicknames": {
+            "type": "hash",
+            "value": {
+                "8aff873e-d0ca-45f3-b500-21b40da027a6": "Nhóm trưởng"
+            }
+        },
+        "msg:1bd79025-0abc-481b-ab3d-429cff611b3e": {
+            "type": "hash",
+            "value": {
+                "msg_id": "1bd79025-0abc-481b-ab3d-429cff611b3e",
+                "conv_id": "dd4ec388-33d6-49cc-a728-c4bc6f30bcb0",
+                "conv_type": "dm",
+                "sender_id": "506e7617-b019-4efe-9088-6407cd26cf05",
+                "type": "text",
+                "content": "alo",
+                "reply_to": "",
+                "status": "sent",
+                "created_at": "1788511937719",
+                "edited_at": "0",
+                "original_content": ""
+            }
+        },
+        "user:230b5849-ff44-4e10-a2a6-ab0dd790ce92:unread": {
+            "type": "hash",
+            "value": {
+                "69afbcab-6ffb-4be4-87b6-9b76a0d47784": "0"
+            }
+        },
+        "user:session:ZfEQya3OhFBvZX6CyNYk7KsQ3qC7PYFP3UCqGWQceNtAGsZJ29S81LAmV3VeeCcd": {
+            "type": "hash",
+            "value": {
+                "ip_address": "127.0.0.1",
+                "created_at": "1788511953696",
+                "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/152.0.0.0 Safari\/537.36",
+                "user_id": "a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1"
+            }
+        },
+        "user:506e7617-b019-4efe-9088-6407cd26cf05:nicknames": {
+            "type": "hash",
+            "value": {
+                "c24d8b97-ca92-4cf8-9cc6-9ef5138fc9bf": "A Minh"
+            }
+        },
+        "admin:backups": {
+            "type": "zset",
+            "value": {
+                "cd7f902d-87b6-4fd4-a101-a8223aabfd4c": "1788510615240",
+                "f4e395a3-3693-49b0-816a-80ca2f7919ff": "1788511528962",
+                "5874d782-e3a9-480f-855a-68a154f1768e": "1788511842998"
+            }
+        },
+        "user:cb5b9ab6-f1c3-45fd-84c6-f18ba7eea48f:friends": {
+            "type": "set",
+            "value": [
+                "8aff873e-d0ca-45f3-b500-21b40da027a6"
+            ]
+        },
+        "group:cc1aa4ac-5bce-4f5b-88f8-8da0c849d398:members": {
+            "type": "hash",
+            "value": {
+                "506e7617-b019-4efe-9088-6407cd26cf05": "owner",
+                "8aff873e-d0ca-45f3-b500-21b40da027a6": "member",
+                "1684f8da-d1b2-4ae5-9a9b-18c8b490d7d7": "member"
+            }
+        },
+        "user:idx:username:khoakp": {
+            "type": "string",
+            "value": "230b5849-ff44-4e10-a2a6-ab0dd790ce92"
+        },
+        "conv:c3330251-165b-49e1-b48d-1ea4e055bbea:msgs": {
+            "type": "zset",
+            "value": {
+                "fd39c858-dee5-4c69-8fbe-86b2fb7402b2": "1788508234474",
+                "f02c91c0-935e-4866-b283-a048ee0d774b": "1788508234518"
+            }
+        },
+        "conv:idx:3572367b-5f4a-4f17-887b-aadda22aa84c:8aff873e-d0ca-45f3-b500-21b40da027a6": {
+            "type": "string",
+            "value": "c3330251-165b-49e1-b48d-1ea4e055bbea"
+        },
+        "user:c96f550c-6b8d-4fe8-8edc-872a5db74b46": {
+            "type": "hash",
+            "value": {
+                "user_id": "c96f550c-6b8d-4fe8-8edc-872a5db74b46",
+                "username": "pi2k",
+                "display_name": "pi2k",
+                "password_hash": "$2y$10$hjXKPDIPQmGsI71V0nw...KrTfRMeBETGYilNb.xvN4X0KEKnra3y",
+                "email": "hihi@gmail.com",
+                "avatar_url": "",
+                "bio": "",
+                "status": "active",
+                "role": "user",
+                "last_seen": "1788510691015",
+                "created_at": "1788510690207",
+                "is_online": "1"
+            }
+        },
+        "user:idx:email:minh070723@gmail.com": {
+            "type": "string",
+            "value": "c24d8b97-ca92-4cf8-9cc6-9ef5138fc9bf"
+        },
+        "conv:idx:230b5849-ff44-4e10-a2a6-ab0dd790ce92:506e7617-b019-4efe-9088-6407cd26cf05": {
+            "type": "string",
+            "value": "69afbcab-6ffb-4be4-87b6-9b76a0d47784"
+        },
+        "user:a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1": {
+            "type": "hash",
+            "value": {
+                "user_id": "a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1",
+                "username": "admin",
+                "display_name": "Quản Trị Viên",
+                "password_hash": "$2y$10$BY4HpIKC29ZuCYoMmcd6fOOsC4jA8KsZFIl4OpujMkWuiZpWISpfS",
+                "email": "admin@chatapp.local",
+                "avatar_url": "",
+                "bio": "Tài khoản quản trị hệ thống",
+                "status": "active",
+                "role": "admin",
+                "last_seen": "1788511979987",
+                "created_at": "1788508234197",
+                "is_online": "1"
+            }
+        },
+        "user:idx:username:charlie": {
+            "type": "string",
+            "value": "cb5b9ab6-f1c3-45fd-84c6-f18ba7eea48f"
+        },
+        "conv:d330be59-4d38-477f-876e-a28729ed6c27:msgs": {
+            "type": "zset",
+            "value": {
+                "9f3f9c66-2a8f-4e9f-8a03-fc066c0540aa": "1788507545440"
+            }
+        },
+        "user:a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1:convs": {
+            "type": "zset",
+            "value": {
+                "f88649d7-0b16-4abe-a9ef-32914ed6c3e6": "1788508234545"
+            }
+        },
+        "user:c24d8b97-ca92-4cf8-9cc6-9ef5138fc9bf": {
+            "type": "hash",
+            "value": {
+                "user_id": "c24d8b97-ca92-4cf8-9cc6-9ef5138fc9bf",
+                "username": "minhdzai",
+                "display_name": "Minhdzai",
+                "password_hash": "$2y$10$vOpXEMTtUT.XO2K0A\/ofju5yZj02jHiYg6GyqKz4VyoR7AzYrWJuy",
+                "email": "minh070723@gmail.com",
+                "avatar_url": "",
+                "bio": "",
+                "status": "active",
+                "role": "user",
+                "last_seen": "1788511226288",
+                "created_at": "1788511194211",
+                "is_online": "1"
+            }
+        },
+        "conv:dd4ec388-33d6-49cc-a728-c4bc6f30bcb0": {
+            "type": "hash",
+            "value": {
+                "conv_id": "dd4ec388-33d6-49cc-a728-c4bc6f30bcb0",
+                "user1_id": "506e7617-b019-4efe-9088-6407cd26cf05",
+                "user2_id": "c24d8b97-ca92-4cf8-9cc6-9ef5138fc9bf",
+                "created_at": "1788511248795",
+                "last_msg_id": "1bd79025-0abc-481b-ab3d-429cff611b3e",
+                "last_msg_at": "1788511937719"
+            }
+        },
+        "group:f88649d7-0b16-4abe-a9ef-32914ed6c3e6:msgs": {
+            "type": "zset",
+            "value": {
+                "96eeed59-1b75-45ed-b8c4-bb02de782d70": "1788508234542",
+                "b930348a-fd64-4833-adda-3c07acf50554": "1788508234545"
+            }
+        },
+        "user:506e7617-b019-4efe-9088-6407cd26cf05:groups": {
+            "type": "set",
+            "value": [
+                "cc1aa4ac-5bce-4f5b-88f8-8da0c849d398"
+            ]
+        },
+        "user:1d610548-b827-4cfd-982c-cda325d60566": {
+            "type": "hash",
+            "value": {
+                "user_id": "1d610548-b827-4cfd-982c-cda325d60566",
+                "username": "ccc",
+                "display_name": "ccc",
+                "password_hash": "$2y$10$iTBgg7m.NiT5FbqN7.I5gOs2SKTm1Q8Ytz8xOtqm3BscBIJAr1Th2",
+                "email": "ccc@gmail.com",
+                "avatar_url": "",
+                "bio": "",
+                "status": "active",
+                "role": "user",
+                "last_seen": "1788511038492",
+                "created_at": "1788511017025",
+                "is_online": "1"
+            }
+        },
+        "conv:idx:1684f8da-d1b2-4ae5-9a9b-18c8b490d7d7:506e7617-b019-4efe-9088-6407cd26cf05": {
+            "type": "string",
+            "value": "d330be59-4d38-477f-876e-a28729ed6c27"
+        },
+        "user:230b5849-ff44-4e10-a2a6-ab0dd790ce92": {
+            "type": "hash",
+            "value": {
+                "user_id": "230b5849-ff44-4e10-a2a6-ab0dd790ce92",
+                "username": "khoakp",
+                "display_name": "Khoakp",
+                "password_hash": "$2y$10$nkN7j23ffwUnpG7KkPvWQ.t8AayBfCQFik5Hae9DeiDdUXYvzwZVG",
+                "email": "khoalp3101@gmail.com",
+                "avatar_url": "",
+                "bio": "",
+                "status": "active",
+                "role": "user",
+                "last_seen": "1788510584865",
+                "created_at": "1788510353452",
+                "is_online": "1"
+            }
+        },
+        "msg:5322f451-8271-4e5e-9a44-f07ec19efccf": {
+            "type": "hash",
+            "value": {
+                "msg_id": "5322f451-8271-4e5e-9a44-f07ec19efccf",
+                "conv_id": "69afbcab-6ffb-4be4-87b6-9b76a0d47784",
+                "conv_type": "dm",
+                "sender_id": "506e7617-b019-4efe-9088-6407cd26cf05",
+                "type": "text",
+                "content": "e xóa tin nhắn thử xem  được không",
+                "reply_to": "",
+                "status": "sent",
+                "created_at": "1788510532060",
+                "edited_at": "0",
+                "original_content": ""
+            }
+        },
+        "user:3572367b-5f4a-4f17-887b-aadda22aa84c:convs": {
+            "type": "zset",
+            "value": {
+                "c3330251-165b-49e1-b48d-1ea4e055bbea": "1788508234518",
+                "f88649d7-0b16-4abe-a9ef-32914ed6c3e6": "1788508234545"
+            }
+        },
+        "user:cb5b9ab6-f1c3-45fd-84c6-f18ba7eea48f:convs": {
+            "type": "zset",
+            "value": {
+                "f88649d7-0b16-4abe-a9ef-32914ed6c3e6": "1788508234545"
+            }
+        },
+        "user:cb5b9ab6-f1c3-45fd-84c6-f18ba7eea48f:groups": {
+            "type": "set",
+            "value": [
+                "f88649d7-0b16-4abe-a9ef-32914ed6c3e6"
+            ]
+        },
+        "conv:69afbcab-6ffb-4be4-87b6-9b76a0d47784:msgs": {
+            "type": "zset",
+            "value": {
+                "607ef532-912d-4e02-8c75-2a7cfb7dd4bf": "1788510401949",
+                "2198a5b9-55ab-48a5-b059-79a30d4826d5": "1788510414180",
+                "1dc8294d-9445-419b-93d8-3f512a9ede95": "1788510501955",
+                "2e357e9d-8265-46c1-8db2-dec81ff39785": "1788510513821",
+                "2a1825d6-2e31-45cc-a2e1-b6b998a42c8b": "1788510521470",
+                "5322f451-8271-4e5e-9a44-f07ec19efccf": "1788510532060",
+                "299065c7-65df-4f80-afeb-5e106194b767": "1788510584055"
+            }
+        },
+        "msg:44664469-3868-4851-b671-bb290fe3a93e": {
+            "type": "hash",
+            "value": {
+                "msg_id": "44664469-3868-4851-b671-bb290fe3a93e",
+                "conv_id": "cc1aa4ac-5bce-4f5b-88f8-8da0c849d398",
+                "conv_type": "group",
+                "sender_id": "506e7617-b019-4efe-9088-6407cd26cf05",
+                "type": "text",
+                "content": "hello",
+                "reply_to": "",
+                "status": "sent",
+                "created_at": "1788509345176",
+                "edited_at": "0",
+                "original_content": ""
+            }
+        },
+        "user:8aff873e-d0ca-45f3-b500-21b40da027a6:friends": {
+            "type": "set",
+            "value": [
+                "3572367b-5f4a-4f17-887b-aadda22aa84c",
+                "506e7617-b019-4efe-9088-6407cd26cf05",
+                "cb5b9ab6-f1c3-45fd-84c6-f18ba7eea48f"
+            ]
+        },
+        "conv:idx:506e7617-b019-4efe-9088-6407cd26cf05:c24d8b97-ca92-4cf8-9cc6-9ef5138fc9bf": {
+            "type": "string",
+            "value": "dd4ec388-33d6-49cc-a728-c4bc6f30bcb0"
+        },
+        "admin:backup:5874d782-e3a9-480f-855a-68a154f1768e": {
+            "type": "hash",
+            "value": {
+                "status": "done",
+                "created_at": "1788511842998",
+                "created_by": "admin",
+                "note": "Bản sao lưu kiểm tra",
+                "type": "full",
+                "file_name": "backup_2026-09-04_085042_5874d782-e3a9-480f-855a-68a154f1768e.json",
+                "backup_id": "5874d782-e3a9-480f-855a-68a154f1768e",
+                "file_path": "C:\\laragon\\www\\chat-app\\storage\\app\/backups\\backup_2026-09-04_085042_5874d782-e3a9-480f-855a-68a154f1768e.json",
+                "size_bytes": "42660"
+            }
+        },
+        "msg:2e357e9d-8265-46c1-8db2-dec81ff39785": {
+            "type": "hash",
+            "value": {
+                "msg_id": "2e357e9d-8265-46c1-8db2-dec81ff39785",
+                "conv_id": "69afbcab-6ffb-4be4-87b6-9b76a0d47784",
+                "conv_type": "dm",
+                "sender_id": "230b5849-ff44-4e10-a2a6-ab0dd790ce92",
+                "type": "text",
+                "content": "",
+                "reply_to": "",
+                "status": "deleted",
+                "created_at": "1788510513821",
+                "edited_at": "0",
+                "original_content": ""
+            }
+        },
+        "user:8aff873e-d0ca-45f3-b500-21b40da027a6:unread": {
+            "type": "hash",
+            "value": {
+                "c3330251-165b-49e1-b48d-1ea4e055bbea": "0",
+                "f88649d7-0b16-4abe-a9ef-32914ed6c3e6": "0",
+                "cc1aa4ac-5bce-4f5b-88f8-8da0c849d398": "0"
+            }
+        },
+        "user:c24d8b97-ca92-4cf8-9cc6-9ef5138fc9bf:convs": {
+            "type": "zset",
+            "value": {
+                "dd4ec388-33d6-49cc-a728-c4bc6f30bcb0": "1788511937719"
+            }
+        },
+        "user:idx:username:alice": {
+            "type": "string",
+            "value": "8aff873e-d0ca-45f3-b500-21b40da027a6"
+        },
+        "user:3572367b-5f4a-4f17-887b-aadda22aa84c:groups": {
+            "type": "set",
+            "value": [
+                "f88649d7-0b16-4abe-a9ef-32914ed6c3e6"
+            ]
+        },
+        "conv:dd4ec388-33d6-49cc-a728-c4bc6f30bcb0:msgs": {
+            "type": "zset",
+            "value": {
+                "4c115982-396a-4210-b5bb-389cd1e6607f": "1788511251095",
+                "78374ba4-8f1c-472c-8ae5-b0661dd5b1d9": "1788511277339",
+                "1bd79025-0abc-481b-ab3d-429cff611b3e": "1788511937719"
+            }
+        },
+        "group:f88649d7-0b16-4abe-a9ef-32914ed6c3e6:members": {
+            "type": "hash",
+            "value": {
+                "8aff873e-d0ca-45f3-b500-21b40da027a6": "owner",
+                "3572367b-5f4a-4f17-887b-aadda22aa84c": "admin",
+                "cb5b9ab6-f1c3-45fd-84c6-f18ba7eea48f": "member",
+                "a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1": "admin"
+            }
+        },
+        "user:3572367b-5f4a-4f17-887b-aadda22aa84c:friends": {
+            "type": "set",
+            "value": [
+                "8aff873e-d0ca-45f3-b500-21b40da027a6"
+            ]
+        },
+        "msg:fd39c858-dee5-4c69-8fbe-86b2fb7402b2": {
+            "type": "hash",
+            "value": {
+                "msg_id": "fd39c858-dee5-4c69-8fbe-86b2fb7402b2",
+                "conv_id": "c3330251-165b-49e1-b48d-1ea4e055bbea",
+                "conv_type": "dm",
+                "sender_id": "8aff873e-d0ca-45f3-b500-21b40da027a6",
+                "type": "text",
+                "content": "Chào Bob! Lâu không gặp nhỉ 😊",
+                "reply_to": "",
+                "status": "sent",
+                "created_at": "1788508234474",
+                "edited_at": "0",
+                "original_content": ""
+            }
+        },
+        "msg:299065c7-65df-4f80-afeb-5e106194b767": {
+            "type": "hash",
+            "value": {
+                "msg_id": "299065c7-65df-4f80-afeb-5e106194b767",
+                "conv_id": "69afbcab-6ffb-4be4-87b6-9b76a0d47784",
+                "conv_type": "dm",
+                "sender_id": "230b5849-ff44-4e10-a2a6-ab0dd790ce92",
+                "type": "text",
+                "content": "Được",
+                "reply_to": "",
+                "status": "sent",
+                "created_at": "1788510584055",
+                "edited_at": "0",
+                "original_content": ""
+            }
+        },
+        "user:idx:email:charlie@chatapp.local": {
+            "type": "string",
+            "value": "cb5b9ab6-f1c3-45fd-84c6-f18ba7eea48f"
+        },
+        "user:1684f8da-d1b2-4ae5-9a9b-18c8b490d7d7:convs": {
+            "type": "zset",
+            "value": {
+                "d330be59-4d38-477f-876e-a28729ed6c27": "1788507545440",
+                "cc1aa4ac-5bce-4f5b-88f8-8da0c849d398": "1788509345176"
+            }
+        },
+        "user:idx:email:alice@chatapp.local": {
+            "type": "string",
+            "value": "8aff873e-d0ca-45f3-b500-21b40da027a6"
+        },
+        "user:506e7617-b019-4efe-9088-6407cd26cf05:convs": {
+            "type": "zset",
+            "value": {
+                "d330be59-4d38-477f-876e-a28729ed6c27": "1788507545440",
+                "cc1aa4ac-5bce-4f5b-88f8-8da0c849d398": "1788509345176",
+                "69afbcab-6ffb-4be4-87b6-9b76a0d47784": "1788510584055",
+                "dd4ec388-33d6-49cc-a728-c4bc6f30bcb0": "1788511937719"
+            }
+        },
+        "user:session:aRngXowA4M7cDbSsw1h1t52UHZUgdKndYKt0XyfaC03fCfOpQPQbWQp9xdazLDgU": {
+            "type": "hash",
+            "value": {
+                "ip_address": "2401:d800:9a23:c656:4e85:c999:bcd5:d34",
+                "created_at": "1788510875614",
+                "user_agent": "Mozilla\/5.0 (Linux; Android 11; CPH1937 Build\/RKQ1.200903.002;) AppleWebKit\/537.36 (KHTML, like Gecko) Version\/4.0 Chrome\/151.0.7922.200 Mobile Safari\/537.36 Zalo android\/260801903 ZaloTheme\/light ZaloLanguage\/vi",
+                "user_id": "1684f8da-d1b2-4ae5-9a9b-18c8b490d7d7"
+            }
+        },
+        "user:idx:username:admin": {
+            "type": "string",
+            "value": "a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1"
+        },
+        "user:session:yeM4DMj7TUwEoZqkVh82TVKAyC8T1XfNI1P5z9MQc5tfaipYMzEDDbnwGgkXKWhb": {
+            "type": "hash",
+            "value": {
+                "ip_address": "127.0.0.1",
+                "created_at": "1788509542276",
+                "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/152.0.0.0 Safari\/537.36",
+                "user_id": "a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1"
+            }
+        },
+        "user:idx:email:khoalp3101@gmail.com": {
+            "type": "string",
+            "value": "230b5849-ff44-4e10-a2a6-ab0dd790ce92"
+        },
+        "user:idx:email:bob@chatapp.local": {
+            "type": "string",
+            "value": "3572367b-5f4a-4f17-887b-aadda22aa84c"
+        },
+        "user:session:5XlUjnWr8aFr4isKXAiY1HP3hLyfItXS6V1IDsAuJP4VeD80H6moZYgYqZyU3We0": {
+            "type": "hash",
+            "value": {
+                "ip_address": "101.53.36.58",
+                "created_at": "1788510690210",
+                "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/152.0.0.0 Safari\/537.36",
+                "user_id": "c96f550c-6b8d-4fe8-8edc-872a5db74b46"
+            }
+        },
+        "user:idx:username:pi2k": {
+            "type": "string",
+            "value": "c96f550c-6b8d-4fe8-8edc-872a5db74b46"
+        },
+        "admin:log": {
+            "type": "zset",
+            "value": {
+                "{\"admin_id\":\"a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1\",\"action\":\"create_backup\",\"target\":\"cd7f902d-87b6-4fd4-a101-a8223aabfd4c\",\"detail\":\"Backup test 04\\\/09\",\"at\":1788510615297}": "1788510615297",
+                "{\"admin_id\":\"a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1\",\"action\":\"restore_initiated\",\"target\":\"redis-cli INFO keyspace\",\"detail\":\"\",\"at\":1788510637414}": "1788510637414",
+                "{\"admin_id\":\"a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1\",\"action\":\"restore_initiated\",\"target\":\"redis-cli SHUTDOWN NOSAVE\",\"detail\":\"\",\"at\":1788510655389}": "1788510655389",
+                "{\"admin_id\":\"a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1\",\"action\":\"create_backup\",\"target\":\"f4e395a3-3693-49b0-816a-80ca2f7919ff\",\"detail\":\"truoc khi xoa tin nhan\",\"at\":1788511528966}": "1788511528966"
+            }
+        },
+        "msg:4c115982-396a-4210-b5bb-389cd1e6607f": {
+            "type": "hash",
+            "value": {
+                "msg_id": "4c115982-396a-4210-b5bb-389cd1e6607f",
+                "conv_id": "dd4ec388-33d6-49cc-a728-c4bc6f30bcb0",
+                "conv_type": "dm",
+                "sender_id": "506e7617-b019-4efe-9088-6407cd26cf05",
+                "type": "text",
+                "content": "",
+                "reply_to": "",
+                "status": "deleted",
+                "created_at": "1788511251095",
+                "edited_at": "0",
+                "original_content": ""
+            }
+        },
+        "user:session:YOmnwn1Vt65Cz4oSghaqrCb2pPG7GqaK0Gf015EETDpYQQNa3yYMtNmKovWo5MVd": {
+            "type": "hash",
+            "value": {
+                "ip_address": "101.53.36.58",
+                "created_at": "1788511017029",
+                "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/152.0.0.0 Safari\/537.36",
+                "user_id": "1d610548-b827-4cfd-982c-cda325d60566"
+            }
+        },
+        "user:a2f6b8ca-bd8a-4768-9971-484cc7ae4dc1:groups": {
+            "type": "set",
+            "value": [
+                "f88649d7-0b16-4abe-a9ef-32914ed6c3e6"
+            ]
+        },
+        "msg:1dc8294d-9445-419b-93d8-3f512a9ede95": {
+            "type": "hash",
+            "value": {
+                "msg_id": "1dc8294d-9445-419b-93d8-3f512a9ede95",
+                "conv_id": "69afbcab-6ffb-4be4-87b6-9b76a0d47784",
+                "conv_type": "dm",
+                "sender_id": "230b5849-ff44-4e10-a2a6-ab0dd790ce92",
+                "type": "text",
+                "content": "Cecj",
+                "reply_to": "",
+                "status": "sent",
+                "created_at": "1788510501955",
+                "edited_at": "0",
+                "original_content": ""
+            }
+        },
+        "msg:96eeed59-1b75-45ed-b8c4-bb02de782d70": {
+            "type": "hash",
+            "value": {
+                "content": "Chào cả nhóm! 👋 Dự án NoSQL của chúng ta bắt đầu thôi nào!",
+                "status": "sent",
+                "reply_to": "",
+                "edited_at": "0",
+                "conv_id": "f88649d7-0b16-4abe-a9ef-32914ed6c3e6",
+                "sender_id": "8aff873e-d0ca-45f3-b500-21b40da027a6",
+                "created_at": "1788508234542",
+                "type": "text",
+                "conv_type": "group",
+                "msg_id": "96eeed59-1b75-45ed-b8c4-bb02de782d70",
+                "original_content": ""
+            }
+        },
+        "user:230b5849-ff44-4e10-a2a6-ab0dd790ce92:friends": {
+            "type": "set",
+            "value": [
+                "506e7617-b019-4efe-9088-6407cd26cf05"
+            ]
+        },
+        "msg:f02c91c0-935e-4866-b283-a048ee0d774b": {
+            "type": "hash",
+            "value": {
+                "msg_id": "f02c91c0-935e-4866-b283-a048ee0d774b",
+                "conv_id": "c3330251-165b-49e1-b48d-1ea4e055bbea",
+                "conv_type": "dm",
+                "sender_id": "3572367b-5f4a-4f17-887b-aadda22aa84c",
+                "type": "text",
+                "content": "Chào Alice! Ừ, lâu lắm rồi. Dạo này bạn thế nào?",
+                "reply_to": "",
+                "status": "sent",
+                "created_at": "1788508234518",
+                "edited_at": "0",
+                "original_content": ""
+            }
+        },
+        "user:cb5b9ab6-f1c3-45fd-84c6-f18ba7eea48f": {
+            "type": "hash",
+            "value": {
+                "user_id": "cb5b9ab6-f1c3-45fd-84c6-f18ba7eea48f",
+                "username": "charlie",
+                "display_name": "Charlie Lê",
+                "password_hash": "$2y$10$\/mNW8\/KUKjrEW2vA2Okrquwfg89zW5tV6fxEU8hzm61gJB6cM3.Uq",
+                "email": "charlie@chatapp.local",
+                "avatar_url": "",
+                "bio": "",
+                "status": "active",
+                "role": "user",
+                "last_seen": "1788508234467",
+                "created_at": "1788508234467",
+                "is_online": "0"
+            }
+        },
+        "user:idx:email:nnl@gmail.com": {
+            "type": "string",
+            "value": "506e7617-b019-4efe-9088-6407cd26cf05"
+        },
+        "group:cc1aa4ac-5bce-4f5b-88f8-8da0c849d398": {
+            "type": "hash",
+            "value": {
+                "group_id": "cc1aa4ac-5bce-4f5b-88f8-8da0c849d398",
+                "name": "test",
+                "avatar_url": "",
+                "owner_id": "506e7617-b019-4efe-9088-6407cd26cf05",
+                "description": "ali ali",
+                "max_members": "50",
+                "created_at": "1788509339717",
+                "last_msg_at": "1788509345176"
+            }
+        },
+        "user:8aff873e-d0ca-45f3-b500-21b40da027a6:convs": {
+            "type": "zset",
+            "value": {
+                "c3330251-165b-49e1-b48d-1ea4e055bbea": "1788508234518",
+                "f88649d7-0b16-4abe-a9ef-32914ed6c3e6": "1788508234545",
+                "cc1aa4ac-5bce-4f5b-88f8-8da0c849d398": "1788509345176"
+            }
+        },
+        "user:idx:username:luong": {
+            "type": "string",
+            "value": "506e7617-b019-4efe-9088-6407cd26cf05"
+        }
+    }
+}
