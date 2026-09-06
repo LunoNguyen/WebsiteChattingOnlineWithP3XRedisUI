@@ -58,6 +58,13 @@ class GroupRepository
         return $data ? new Group($data) : null;
     }
 
+    /* ─── Update Group ─── */
+    public function update(string $groupId, array $data): bool
+    {
+        Redis::hMSet($this->groupKey($groupId), $data);
+        return true;
+    }
+
     /* ─── Members ─── */
 
     public function addMember(string $groupId, string $userId, string $role = 'member'): void
@@ -174,5 +181,53 @@ class GroupRepository
     public function getUserGroupIds(string $userId): array
     {
         return Redis::sMembers($this->userGroupsKey($userId)) ?? [];
+    }
+
+    /**
+     * Lấy tin nhắn mới hơn mốc thời gian $afterTimestamp (dùng cho polling thời gian thực)
+     * @return Message[]
+     */
+    public function getNewMessages(string $groupId, int $afterTimestamp): array
+    {
+        $msgIds = Redis::zRangeByScore($this->msgsKey($groupId), '(' . $afterTimestamp, '+inf');
+        $messages = [];
+        foreach ($msgIds ?? [] as $id) {
+            $data = Redis::hGetAll("msg:{$id}");
+            if ($data) $messages[] = new Message($data);
+        }
+        return $messages;
+    }
+
+    /** Chuyển quyền trưởng nhóm */
+    public function transferOwnership(string $groupId, string $oldOwnerId, string $newOwnerId): bool
+    {
+        Redis::hSet($this->groupKey($groupId), 'owner_id', $newOwnerId);
+        Redis::hSet($this->membersKey($groupId), $newOwnerId, 'owner');
+        Redis::hSet($this->membersKey($groupId), $oldOwnerId, 'admin');
+        return true;
+    }
+
+    /** Xóa toàn bộ nhóm và dữ liệu liên quan */
+    public function deleteGroup(string $groupId): bool
+    {
+        $members = array_keys($this->getAllMembers($groupId));
+        foreach ($members as $memberId) {
+            Redis::sRem($this->userGroupsKey($memberId), $groupId);
+            Redis::zRem($this->userConvsKey($memberId), $groupId);
+            Redis::hDel($this->unreadKey($memberId), $groupId);
+        }
+
+        // Xóa các tin nhắn trong nhóm
+        $msgIds = Redis::zRange($this->msgsKey($groupId), 0, -1);
+        foreach ($msgIds ?? [] as $msgId) {
+            Redis::del("msg:{$msgId}");
+        }
+
+        Redis::del($this->msgsKey($groupId));
+        Redis::del($this->membersKey($groupId));
+        Redis::del($this->nicknamesKey($groupId));
+        Redis::del($this->groupKey($groupId));
+
+        return true;
     }
 }

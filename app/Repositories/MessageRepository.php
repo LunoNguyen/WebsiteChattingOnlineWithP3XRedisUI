@@ -129,6 +129,17 @@ class MessageRepository
         return $data ? new Message($data) : null;
     }
 
+    public function findById(string $msgId): ?Message
+    {
+        return $this->findMessageById($msgId);
+    }
+
+    public function updateMessageContent(string $msgId, string $newContent): bool
+    {
+        Redis::hSet($this->msgKey($msgId), 'content', $newContent);
+        return true;
+    }
+
     /**
      * Lấy tin nhắn theo trang (phân trang ngược — mới nhất trước)
      * @return Message[]
@@ -191,5 +202,20 @@ class MessageRepository
     {
         $counts = $this->getUnreadCounts($userId);
         return array_sum(array_map('intval', $counts));
+    }
+
+    /**
+     * Lấy các tin nhắn mới hơn timestamp $afterTimestamp (dùng cho polling không cần reload)
+     * @return Message[]
+     */
+    public function getNewMessages(string $convId, int $afterTimestamp): array
+    {
+        $msgIds = Redis::zRangeByScore($this->convMsgsKey($convId), '(' . $afterTimestamp, '+inf');
+        $messages = [];
+        foreach ($msgIds ?? [] as $id) {
+            $msg = $this->findMessageById($id);
+            if ($msg) $messages[] = $msg;
+        }
+        return $messages;
     }
 }

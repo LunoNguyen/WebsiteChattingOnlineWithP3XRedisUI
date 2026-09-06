@@ -30,15 +30,26 @@ Route::middleware('redis.auth')->group(function () {
     Route::get('/chat',                       [ChatController::class, 'index'])->name('chat.index');
     Route::get('/chat/dm/{userId}',           [ChatController::class, 'showDM'])->name('chat.dm');
     Route::post('/chat/dm/{userId}/send',     [ChatController::class, 'sendDM'])->name('chat.dm.send');
+    Route::post('/chat/dm/{userId}/file',     [\App\Http\Controllers\FileController::class, 'uploadDM'])->name('chat.dm.file');
+    Route::post('/chat/dm/{userId}/send/file',[\App\Http\Controllers\FileController::class, 'uploadDM']);
     Route::get('/chat/dm/{userId}/more',      [ChatController::class, 'loadMoreDM'])->name('chat.dm.more');
+    Route::get('/chat/dm/{userId}/new',       [ChatController::class, 'getNewDM'])->name('chat.dm.new');
 
     /* Chat — Group */
     Route::get('/chat/group/{groupId}',       [ChatController::class, 'showGroup'])->name('chat.group');
     Route::post('/chat/group/{groupId}/send', [ChatController::class, 'sendGroup'])->name('chat.group.send');
+    Route::post('/chat/group/{groupId}/file', [\App\Http\Controllers\FileController::class, 'uploadGroup'])->name('chat.group.file');
+    Route::post('/chat/group/{groupId}/send/file', [\App\Http\Controllers\FileController::class, 'uploadGroup']);
+    Route::get('/chat/group/{groupId}/new',   [ChatController::class, 'getNewGroup'])->name('chat.group.new');
+    Route::get('/chat/status-poll',           [ChatController::class, 'pollStatus'])->name('chat.status.poll');
+
+    /* File Serving */
+    Route::get('/files/serve',                [\App\Http\Controllers\FileController::class, 'serve'])->name('file.serve');
 
     /* Message CRUD */
     Route::put('/message/{msgId}',            [ChatController::class, 'editMessage'])->name('message.edit');
     Route::delete('/message/{msgId}',         [ChatController::class, 'deleteMessage'])->name('message.delete');
+    Route::post('/message/{msgId}/vote',      [ChatController::class, 'votePoll'])->name('message.vote');
 
     /* Friends */
     Route::get('/friends',                    [FriendController::class, 'index'])->name('friends.index');
@@ -56,11 +67,17 @@ Route::middleware('redis.auth')->group(function () {
     Route::get('/groups',                     [GroupController::class, 'index'])->name('groups.index');
     Route::get('/groups/create',              [GroupController::class, 'create'])->name('groups.create');
     Route::post('/groups',                    [GroupController::class, 'store'])->name('groups.store');
+    Route::get('/groups/{groupId}/candidates',[GroupController::class, 'getCandidates'])->name('groups.candidates');
     Route::post('/groups/{groupId}/member',   [GroupController::class, 'addMember'])->name('groups.member.add');
     Route::delete('/groups/{groupId}/member', [GroupController::class, 'removeMember'])->name('groups.member.remove');
     Route::post('/groups/{groupId}/leave',    [GroupController::class, 'leave'])->name('groups.leave');
     Route::post('/groups/{groupId}/nickname', [GroupController::class, 'setNickname'])->name('groups.nickname');
     Route::post('/groups/{groupId}/promote',  [GroupController::class, 'promoteAdmin'])->name('groups.promote');
+    Route::post('/groups/{groupId}/demote',   [GroupController::class, 'demoteAdmin'])->name('groups.demote');
+    Route::post('/groups/{groupId}/transfer', [GroupController::class, 'transferOwnership'])->name('groups.transfer');
+    Route::put('/groups/{groupId}',           [GroupController::class, 'update'])->name('groups.update');
+    Route::post('/groups/{groupId}/update',    [GroupController::class, 'update'])->name('groups.update.post');
+    Route::delete('/groups/{groupId}',        [GroupController::class, 'destroy'])->name('groups.destroy');
 
     /* ─── Admin routes ─── */
     Route::middleware('admin.only')->prefix('admin')->name('admin.')->group(function () {

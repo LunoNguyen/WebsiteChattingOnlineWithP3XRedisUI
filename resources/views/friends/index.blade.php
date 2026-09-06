@@ -70,10 +70,9 @@
             </span>
           </div>
 
-          {{-- Name & Username --}}
+          {{-- Name --}}
           <div class="mb-3">
             <h4 id="card-name" class="font-bold text-gray-900 text-base">Tên người dùng</h4>
-            <p id="card-username" class="text-xs text-gray-400">@username</p>
           </div>
 
           {{-- Bio --}}
@@ -102,130 +101,290 @@
       </div>
     </div>
 
-    {{-- Pending requests --}}
-    @if(count($requests) > 0)
-    <div class="bg-white rounded-xl shadow-sm border border-amber-200 p-5">
-      <h3 class="font-semibold text-gray-900 mb-3">📨 Lời mời kết bạn ({{ count($requests) }})</h3>
-      <div class="space-y-3">
-        @foreach($requests as $req)
-        <div class="flex items-center gap-3">
-          <button type="button" onclick="openUserProfile('{{ $req['from_user']->user_id }}')"
-            class="flex items-center gap-3 flex-1 min-w-0 text-left hover:opacity-80 transition group" title="Bấm để xem hồ sơ">
-            <div class="w-9 h-9 rounded-full bg-sky-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 group-hover:ring-2 group-hover:ring-sky-400">
-              {{ strtoupper(substr($req['from_user']->getName(), 0, 1)) }}
-            </div>
+    {{-- ── Gợi ý kết bạn ── --}}
+    @if(count($suggestions) > 0)
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+      <h3 class="font-semibold text-gray-900 mb-1 flex items-center gap-2 text-sm">
+        <span>✨ Gợi ý kết bạn</span>
+        <span class="text-xs text-gray-400 font-normal">(Bạn của bạn bè)</span>
+      </h3>
+      <p class="text-xs text-gray-500 mb-4">Những người bạn có thể quen biết thông qua bạn bè chung.</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        @foreach($suggestions as $sug)
+          @php $sugUser = $sug['user']; @endphp
+          <div class="flex items-center gap-3 p-3 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition">
+            {{-- Avatar --}}
+            <button type="button" onclick="openUserProfile('{{ $sugUser->user_id }}')" class="flex-shrink-0 hover:opacity-80">
+              @if($sugUser->avatar_url)
+                <img src="{{ $sugUser->avatar_url }}" class="w-11 h-11 rounded-full object-cover">
+              @else
+                <div class="w-11 h-11 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold">
+                  {{ strtoupper(substr($sugUser->getName(), 0, 1)) }}
+                </div>
+              @endif
+            </button>
+
+            {{-- Info --}}
             <div class="flex-1 min-w-0">
-              <p class="font-medium text-sm text-gray-900 group-hover:text-sky-600 transition">{{ $req['from_user']->getName() }}</p>
-              <p class="text-xs text-gray-500">@{{ $req['from_user']->username }}@if($req['message']) · "{{ $req['message'] }}"@endif</p>
+              <button type="button" onclick="openUserProfile('{{ $sugUser->user_id }}')" class="text-left hover:opacity-80 w-full">
+                <p class="text-sm font-semibold text-gray-900 truncate">{{ $sugUser->getName() }}</p>
+                <p class="text-xs text-gray-400">
+                  {{ $sug['mutual'] }} bạn chung
+                </p>
+              </button>
             </div>
-          </button>
-          <div class="flex gap-2 flex-shrink-0">
-            <form method="POST" action="{{ route('friends.accept') }}">
-              @csrf
-              <input type="hidden" name="from_user_id" value="{{ $req['from_user_id'] }}">
-              <button class="bg-green-500 hover:bg-green-600 text-white text-xs px-3 py-1.5 rounded-lg font-medium">Chấp nhận</button>
-            </form>
-            <form method="POST" action="{{ route('friends.reject') }}">
-              @csrf
-              <input type="hidden" name="from_user_id" value="{{ $req['from_user_id'] }}">
-              <button class="bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs px-3 py-1.5 rounded-lg font-medium">Từ chối</button>
-            </form>
+
+            {{-- Action --}}
+            <div class="flex-shrink-0">
+              @if($sug['has_sent'])
+                <span class="text-[11px] text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1.5 rounded-lg font-medium">⏳ Đã gửi</span>
+              @elseif($sug['has_received'])
+                <form method="POST" action="{{ route('friends.accept') }}" class="inline">
+                  @csrf
+                  <input type="hidden" name="from_user_id" value="{{ $sugUser->user_id }}">
+                  <button class="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition">✓ Chấp nhận</button>
+                </form>
+              @else
+                <button type="button"
+                  onclick="quickAddFriend('{{ $sugUser->user_id }}', '{{ $sugUser->getName() }}', this)"
+                  class="bg-sky-500 hover:bg-sky-600 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition">
+                  + Kết bạn
+                </button>
+              @endif
+            </div>
           </div>
-        </div>
         @endforeach
       </div>
     </div>
     @endif
 
-    {{-- Friends list --}}
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-      <h3 class="font-semibold text-gray-900 mb-3">👥 Bạn bè ({{ count($friends) }})</h3>
-      @forelse($friends as $item)
-        @php $friend = $item['user']; @endphp
-        <div class="flex items-center gap-3 py-2.5 border-b border-gray-50 last:border-0">
-          <button type="button" onclick="openUserProfile('{{ $friend->user_id }}')"
-            class="flex items-center gap-3 flex-1 min-w-0 text-left hover:opacity-80 transition group" title="Bấm để xem hồ sơ">
-            <div class="relative flex-shrink-0">
-              @if($friend->avatar_url)
-                <img src="{{ $friend->avatar_url }}" class="w-10 h-10 rounded-full object-cover">
-              @else
-                <div class="w-10 h-10 rounded-full bg-sky-400 flex items-center justify-center text-white font-bold">
-                  {{ strtoupper(substr($friend->getName(), 0, 1)) }}
-                </div>
-              @endif
-              @if($item['is_online'])
-                <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-white"></span>
-              @endif
+    {{-- ── Navigation Tabs ── --}}
+    <div class="flex border-b border-gray-200 gap-2 sm:gap-6 text-sm font-medium bg-white p-2 sm:px-4 rounded-xl shadow-xs">
+      <button type="button" onclick="switchFriendTab('friends')" id="tab-btn-friends"
+        class="pb-2.5 px-3 border-b-2 border-sky-500 text-sky-600 flex items-center gap-2 transition font-semibold">
+        <span>👥 Bạn bè</span>
+        <span class="bg-sky-100 text-sky-700 text-xs px-2 py-0.5 rounded-full font-bold">{{ count($friends) }}</span>
+      </button>
+
+      <button type="button" onclick="switchFriendTab('requests')" id="tab-btn-requests"
+        class="pb-2.5 px-3 border-b-2 border-transparent text-gray-500 hover:text-gray-700 flex items-center gap-2 transition font-medium">
+        <span>📨 Lời mời kết bạn</span>
+        @if(count($requests) > 0)
+          <span class="bg-amber-500 text-white text-xs px-2 py-0.5 rounded-full font-bold animate-pulse">{{ count($requests) }}</span>
+        @else
+          <span class="bg-gray-100 text-gray-500 text-xs px-2 py-0.5 rounded-full">0</span>
+        @endif
+      </button>
+
+      <button type="button" onclick="switchFriendTab('blocked')" id="tab-btn-blocked"
+        class="pb-2.5 px-3 border-b-2 border-transparent text-gray-500 hover:text-gray-700 flex items-center gap-2 transition font-medium">
+        <span>🚫 Quản lý chặn</span>
+        <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full font-semibold">{{ count($blockedUsers) }}</span>
+      </button>
+    </div>
+
+    {{-- ═════════ TAB 1: FRIENDS LIST ═════════ --}}
+    <div id="tab-content-friends" class="space-y-4">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-semibold text-gray-900 text-sm">👥 Danh sách bạn bè ({{ count($friends) }})</h3>
+          <span class="text-xs text-gray-400">Bấm vào tên để xem hồ sơ chi tiết</span>
+        </div>
+
+        @forelse($friends as $item)
+          @php $friend = $item['user']; @endphp
+          <div class="flex items-center gap-3 py-3 border-b border-gray-50 last:border-0 hover:bg-gray-50/70 px-2 rounded-lg transition">
+            <button type="button" onclick="openUserProfile('{{ $friend->user_id }}')"
+              class="flex items-center gap-3 flex-1 min-w-0 text-left hover:opacity-80 transition group" title="Bấm để xem hồ sơ">
+              <div class="relative flex-shrink-0">
+                @if($friend->avatar_url)
+                  <img src="{{ $friend->avatar_url }}" class="w-10 h-10 rounded-full object-cover">
+                @else
+                  <div class="w-10 h-10 rounded-full bg-sky-400 flex items-center justify-center text-white font-bold text-sm">
+                    {{ strtoupper(substr($friend->getName(), 0, 1)) }}
+                  </div>
+                @endif
+                @if($item['is_online'])
+                  <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-white"></span>
+                @endif
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="font-medium text-sm text-gray-900 group-hover:text-sky-600 transition truncate">
+                  {{ $item['nickname'] ?: $friend->getName() }}
+                </p>
+                <p class="text-xs {{ $item['is_online'] ? 'text-green-500 font-medium' : 'text-gray-400' }}">
+                  {{ $item['is_online'] ? 'Đang online' : 'Offline' }}
+                </p>
+              </div>
+            </button>
+
+            <div class="flex gap-1.5 flex-shrink-0 items-center">
+              <a href="{{ route('chat.dm', $friend->user_id) }}"
+                 class="bg-sky-500 hover:bg-sky-600 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition shadow-xs">Nhắn tin</a>
+
+              {{-- Nickname --}}
+              <button onclick="this.nextElementSibling.classList.toggle('hidden')"
+                class="bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs px-2.5 py-1.5 rounded-lg transition" title="Đặt biệt danh">🏷️</button>
+              <form method="POST" action="{{ route('friends.nickname') }}" class="hidden flex gap-1 items-center">
+                @csrf
+                <input type="hidden" name="friend_id" value="{{ $friend->user_id }}">
+                <input type="text" name="nickname" value="{{ $item['nickname'] }}" placeholder="Biệt danh"
+                  class="border border-gray-200 rounded-lg px-2 py-1 text-xs w-28 focus:outline-none focus:ring-1 focus:ring-sky-400">
+                <button class="bg-sky-500 text-white text-xs px-2.5 py-1 rounded-lg font-medium">Lưu</button>
+              </form>
+
+              {{-- Remove friend --}}
+              <form method="POST" action="{{ route('friends.remove') }}"
+                onsubmit="return confirm('Hủy kết bạn với {{ $friend->getName() }}?')">
+                @csrf
+                <input type="hidden" name="friend_id" value="{{ $friend->user_id }}">
+                <button class="bg-red-50 hover:bg-red-100 text-red-600 text-xs px-2.5 py-1.5 rounded-lg font-medium transition">Xóa bạn</button>
+              </form>
+
+              {{-- Block --}}
+              <form method="POST" action="{{ route('friends.block') }}"
+                onsubmit="return confirm('Chặn {{ $friend->getName() }}? Người này sẽ không thể nhắn tin cho bạn.')">
+                @csrf
+                <input type="hidden" name="target_id" value="{{ $friend->user_id }}">
+                <button class="bg-gray-100 hover:bg-red-100 hover:text-red-600 text-gray-500 text-xs px-2.5 py-1.5 rounded-lg transition" title="Chặn người dùng">🚫 Chặn</button>
+              </form>
             </div>
-            <div class="flex-1 min-w-0">
-              <p class="font-medium text-sm text-gray-900 group-hover:text-sky-600 transition">
-                {{ $item['nickname'] ?: $friend->getName() }}
-                @if($item['nickname'])<span class="text-gray-400 text-xs font-normal ml-1">({{ $friend->username }})</span>@endif
-              </p>
-              <p class="text-xs {{ $item['is_online'] ? 'text-green-500' : 'text-gray-400' }}">
-                {{ $item['is_online'] ? 'Online' : 'Offline' }}
-              </p>
-            </div>
-          </button>
-          <div class="flex gap-1.5 flex-shrink-0 items-center">
-            <a href="{{ route('chat.dm', $friend->user_id) }}"
-               class="bg-sky-100 hover:bg-sky-200 text-sky-700 text-xs px-2.5 py-1.5 rounded-lg font-medium">Chat</a>
+          </div>
+        @empty
+          <div class="text-center py-10 text-gray-400">
+            <div class="text-4xl mb-2">👥</div>
+            <p class="text-sm font-medium">Chưa có bạn bè nào</p>
+            <p class="text-xs text-gray-400 mt-1">Dùng thanh tìm kiếm ở trên để kết bạn với mọi người nhé!</p>
+          </div>
+        @endforelse
+      </div>
+    </div>
 
-            {{-- Nickname --}}
-            <button onclick="this.nextElementSibling.classList.toggle('hidden')"
-              class="bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs px-2.5 py-1.5 rounded-lg" title="Đặt biệt danh">🏷️</button>
-            <form method="POST" action="{{ route('friends.nickname') }}" class="hidden flex gap-1">
-              @csrf
-              <input type="hidden" name="friend_id" value="{{ $friend->user_id }}">
-              <input type="text" name="nickname" value="{{ $item['nickname'] }}" placeholder="Nickname"
-                class="border border-gray-200 rounded px-2 py-1 text-xs w-24 focus:outline-none focus:ring-1 focus:ring-sky-400">
-              <button class="bg-sky-500 text-white text-xs px-2 rounded">Lưu</button>
-            </form>
-
-            {{-- Remove friend --}}
-            <form method="POST" action="{{ route('friends.remove') }}"
-              onsubmit="return confirm('Xóa {{ $friend->getName() }} khỏi danh sách bạn bè?')">
-              @csrf
-              <input type="hidden" name="friend_id" value="{{ $friend->user_id }}">
-              <button class="bg-red-50 hover:bg-red-100 text-red-500 text-xs px-2.5 py-1.5 rounded-lg">Xóa</button>
-            </form>
-
-            {{-- Block --}}
-            <form method="POST" action="{{ route('friends.block') }}"
-              onsubmit="return confirm('Chặn {{ $friend->getName() }}?')">
-              @csrf
-              <input type="hidden" name="target_id" value="{{ $friend->user_id }}">
-              <button class="bg-gray-100 hover:bg-gray-200 text-gray-500 text-xs px-2.5 py-1.5 rounded-lg" title="Chặn">🚫</button>
-            </form>
+    {{-- ═════════ TAB 2: PENDING REQUESTS ═════════ --}}
+    <div id="tab-content-requests" class="hidden space-y-4">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="font-semibold text-gray-900 text-sm">📨 Lời mời kết bạn đang chờ duyệt ({{ count($requests) }})</h3>
+            <p class="text-xs text-gray-400 mt-0.5">Những người muốn kết nối và trò chuyện cùng bạn</p>
           </div>
         </div>
-      @empty
-        <p class="text-gray-400 text-sm text-center py-6">Chưa có bạn bè nào. Hãy tìm kiếm và kết bạn!</p>
-      @endforelse
+
+        <div class="space-y-3">
+          @forelse($requests as $req)
+          <div class="flex items-center gap-3 p-3 bg-gray-50/70 border border-gray-100 rounded-xl hover:bg-gray-50 transition">
+            <button type="button" onclick="openUserProfile('{{ $req['from_user']->user_id }}')"
+              class="flex items-center gap-3 flex-1 min-w-0 text-left hover:opacity-80 transition group" title="Bấm để xem hồ sơ">
+              <div class="w-10 h-10 rounded-full bg-sky-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 group-hover:ring-2 group-hover:ring-sky-400">
+                {{ strtoupper(substr($req['from_user']->getName(), 0, 1)) }}
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="font-semibold text-sm text-gray-900 group-hover:text-sky-600 transition">{{ $req['from_user']->getName() }}</p>
+                @if($req['message'])
+                  <p class="text-xs text-sky-700 bg-sky-50 rounded px-2 py-0.5 mt-1 inline-block italic">"{{ $req['message'] }}"</p>
+                @endif
+              </div>
+            </button>
+            <div class="flex gap-2 flex-shrink-0">
+              <form method="POST" action="{{ route('friends.accept') }}">
+                @csrf
+                <input type="hidden" name="from_user_id" value="{{ $req['from_user_id'] }}">
+                <button class="bg-green-600 hover:bg-green-700 text-white text-xs px-3.5 py-2 rounded-lg font-medium transition shadow-xs flex items-center gap-1">
+                  <span>✓</span>
+                  <span>Đồng ý</span>
+                </button>
+              </form>
+              <form method="POST" action="{{ route('friends.reject') }}">
+                @csrf
+                <input type="hidden" name="from_user_id" value="{{ $req['from_user_id'] }}">
+                <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs px-3.5 py-2 rounded-lg font-medium transition">Từ chối</button>
+              </form>
+            </div>
+          </div>
+          @empty
+            <div class="text-center py-10 text-gray-400">
+              <div class="text-4xl mb-2">✨</div>
+              <p class="text-sm font-medium">Không có lời mời kết bạn nào</p>
+              <p class="text-xs text-gray-400 mt-1">Khi có ai đó gửi lời mời, bạn sẽ thấy thông báo tại đây.</p>
+            </div>
+          @endforelse
+        </div>
+      </div>
     </div>
 
-    {{-- Blocked users --}}
-    @if(count($blockedUsers) > 0)
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-      <h3 class="font-semibold text-gray-900 mb-3">🚫 Đã chặn ({{ count($blockedUsers) }})</h3>
-      @foreach($blockedUsers as $blocked)
-      <div class="flex items-center gap-3 py-2">
-        <div class="w-9 h-9 rounded-full bg-gray-400 flex items-center justify-center text-white font-bold text-sm">
-          {{ strtoupper(substr($blocked->getName(), 0, 1)) }}
+    {{-- ═════════ TAB 3: BLOCKED USERS MANAGEMENT ═════════ --}}
+    <div id="tab-content-blocked" class="hidden space-y-4">
+      {{-- Block management header card --}}
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+        <div class="flex items-center justify-between mb-2">
+          <div>
+            <h3 class="font-semibold text-gray-900 text-sm flex items-center gap-2">
+              <span>🚫 Quản lý danh sách chặn</span>
+              <span class="bg-red-100 text-red-700 text-xs px-2 py-0.5 rounded-full font-bold">{{ count($blockedUsers) }}</span>
+            </h3>
+            <p class="text-xs text-gray-500 mt-1 leading-relaxed">
+              Người dùng bị chặn sẽ không thể gửi tin nhắn, gửi lời mời kết bạn hoặc xem trạng thái trực tuyến của bạn. Bạn có thể gỡ bỏ chặn bất kỳ lúc nào.
+            </p>
+          </div>
         </div>
-        <div class="flex-1">
-          <p class="text-sm text-gray-700">{{ $blocked->getName() }}</p>
-          <p class="text-xs text-gray-400">@{{ $blocked->username }}</p>
+
+        {{-- Quick Block Form --}}
+        <div class="mt-4 pt-4 border-t border-gray-100">
+          <label class="block text-xs font-medium text-gray-700 mb-1.5">Chặn nhanh qua tên đăng nhập (username):</label>
+          <form method="POST" action="{{ route('friends.block') }}" class="flex gap-2"
+            onsubmit="return confirm('Xác nhận chặn người dùng này?')">
+            @csrf
+            <input type="text" name="username" placeholder="Nhập username cần chặn..."
+              class="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-red-400" required>
+            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-medium transition flex items-center gap-1">
+              <span>🚫 Chặn</span>
+            </button>
+          </form>
         </div>
-        <form method="POST" action="{{ route('friends.unblock') }}">
-          @csrf
-          <input type="hidden" name="target_id" value="{{ $blocked->user_id }}">
-          <button class="text-xs text-sky-500 hover:underline">Bỏ chặn</button>
-        </form>
       </div>
-      @endforeach
+
+      {{-- Blocked Users List --}}
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Danh sách tài khoản đang bị chặn</h4>
+
+        <div class="space-y-2">
+          @forelse($blockedUsers as $blocked)
+            <div class="flex items-center justify-between p-3 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-gray-50 transition">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                  {{ strtoupper(substr($blocked->getName(), 0, 1)) }}
+                </div>
+                <div>
+                  <p class="text-sm font-semibold text-gray-900">{{ $blocked->getName() }}</p>
+                  @if($blocked->bio)
+                    <p class="text-[11px] text-gray-500 italic mt-0.5 line-clamp-1">{{ $blocked->bio }}</p>
+                  @endif
+                </div>
+              </div>
+
+              {{-- Unblock Button --}}
+              <form method="POST" action="{{ route('friends.unblock') }}"
+                onsubmit="return confirm('Bạn có chắc chắn muốn gỡ chặn cho {{ $blocked->getName() }}?')">
+                @csrf
+                <input type="hidden" name="target_id" value="{{ $blocked->user_id }}">
+                <button type="submit"
+                  class="bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 hover:border-sky-300 text-xs px-3.5 py-1.5 rounded-lg font-medium transition flex items-center gap-1">
+                  <span>🔓</span>
+                  <span>Gỡ chặn</span>
+                </button>
+              </form>
+            </div>
+          @empty
+            <div class="text-center py-10 text-gray-400">
+              <div class="text-3xl mb-2">🕊️</div>
+              <p class="text-sm font-medium">Không có ai trong danh sách chặn</p>
+              <p class="text-xs text-gray-400 mt-1">Khi bạn chặn một người dùng, họ sẽ hiển thị ở đây và bạn có thể gỡ chặn bất kỳ lúc nào.</p>
+            </div>
+          @endforelse
+        </div>
+      </div>
     </div>
-    @endif
 
   </div>
 </div>
@@ -251,7 +410,6 @@
 
       <div class="mb-3">
         <h4 id="modal-name" class="font-bold text-gray-900 text-lg leading-snug">Tên người dùng</h4>
-        <p id="modal-username" class="text-xs text-gray-400">@username</p>
       </div>
 
       <div class="bg-gray-50 rounded-xl p-3 mb-4 text-xs text-gray-600">
@@ -344,9 +502,8 @@ function renderProfileCard(user, relation) {
     document.getElementById('card-status-text').textContent = 'Offline';
   }
 
-  // Name, username, bio, role, created_at
+  // Name, bio, role, created_at
   document.getElementById('card-name').textContent = user.name;
-  document.getElementById('card-username').textContent = '@' + user.username;
   document.getElementById('card-bio').textContent = user.bio || 'Chưa cập nhật tiểu sử.';
   document.getElementById('card-role').textContent = user.role === 'admin' ? 'Quản trị viên' : 'Thành viên';
   document.getElementById('card-role').className = user.role === 'admin'
@@ -503,7 +660,6 @@ async function openUserProfile(userId) {
     }
 
     document.getElementById('modal-name').textContent = u.nickname ? `${u.nickname} (${u.name})` : u.name;
-    document.getElementById('modal-username').textContent = '@' + u.username;
     document.getElementById('modal-bio').textContent = u.bio || 'Chưa cập nhật tiểu sử.';
     document.getElementById('modal-role').textContent = u.role === 'admin' ? 'Quản trị viên' : 'Thành viên';
     document.getElementById('modal-created-at').textContent = u.created_at || 'Mới tham gia';
@@ -538,6 +694,69 @@ async function openUserProfile(userId) {
 
 function closeUserProfileModal() {
   document.getElementById('user-profile-modal').classList.add('hidden');
+}
+
+// ── Tab Switching ──
+function switchFriendTab(tab) {
+  const tabs = ['friends', 'requests', 'blocked'];
+  tabs.forEach(t => {
+    const content = document.getElementById(`tab-content-${t}`);
+    const btn = document.getElementById(`tab-btn-${t}`);
+    if (!content || !btn) return;
+
+    if (t === tab) {
+      content.classList.remove('hidden');
+      btn.className = 'pb-2.5 px-3 border-b-2 border-sky-500 text-sky-600 flex items-center gap-2 transition font-semibold';
+    } else {
+      content.classList.add('hidden');
+      btn.className = 'pb-2.5 px-3 border-b-2 border-transparent text-gray-500 hover:text-gray-700 flex items-center gap-2 transition font-medium';
+    }
+  });
+  try { history.replaceState(null, null, '#' + tab); } catch(e){}
+}
+
+// Auto open tab from hash on load
+window.addEventListener('DOMContentLoaded', () => {
+  const hash = window.location.hash.replace('#', '');
+  if (['friends', 'requests', 'blocked'].includes(hash)) {
+    switchFriendTab(hash);
+  }
+});
+
+// ── Quick Add Friend from Suggestion Card ──
+async function quickAddFriend(userId, userName, btn) {
+  if (!btn || btn.disabled) return;
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Đang gửi...';
+  btn.classList.add('opacity-70', 'cursor-not-allowed');
+
+  try {
+    const res = await fetch('/friends/request', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': CSRF_TOKEN,
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({ user_id: userId })
+    });
+    const data = await res.json();
+    if (data.success) {
+      // Replace button with "Đã gửi" badge
+      btn.outerHTML = `<span class="text-[11px] text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1.5 rounded-lg font-medium">⏳ Đã gửi</span>`;
+    } else {
+      alert(data.error || 'Không thể gửi lời mời kết bạn.');
+      btn.disabled = false;
+      btn.textContent = originalText;
+      btn.classList.remove('opacity-70', 'cursor-not-allowed');
+    }
+  } catch(e) {
+    alert('Lỗi kết nối. Vui lòng thử lại.');
+    btn.disabled = false;
+    btn.textContent = originalText;
+    btn.classList.remove('opacity-70', 'cursor-not-allowed');
+  }
 }
 </script>
 @endpush

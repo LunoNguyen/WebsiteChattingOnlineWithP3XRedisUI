@@ -37,12 +37,15 @@
               <label class="flex items-center gap-2.5 cursor-pointer hover:bg-gray-50 rounded px-1 py-0.5">
                 <input type="checkbox" name="member_ids[]" value="{{ $item['user']->user_id }}"
                   class="w-4 h-4 text-sky-500 rounded border-gray-300">
-                <div class="w-7 h-7 rounded-full bg-sky-400 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                  {{ strtoupper(substr($item['user']->getName(), 0, 1)) }}
-                </div>
+                @if($item['user']->avatar_url)
+                  <img src="{{ $item['user']->avatar_url }}" class="w-7 h-7 rounded-full object-cover flex-shrink-0">
+                @else
+                  <div class="w-7 h-7 rounded-full bg-sky-400 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                    {{ strtoupper(substr($item['user']->getName(), 0, 1)) }}
+                  </div>
+                @endif
                 <div>
                   <span class="text-sm text-gray-900">{{ $item['nickname'] ?: $item['user']->getName() }}</span>
-                  <span class="text-xs text-gray-400 ml-1">@{{ $item['user']->username }}</span>
                 </div>
                 @if($item['is_online'])
                   <span class="w-1.5 h-1.5 bg-green-400 rounded-full ml-auto"></span>

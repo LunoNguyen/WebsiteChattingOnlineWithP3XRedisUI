@@ -1,13 +1,18 @@
 <?php $__env->startSection('title', 'Tin nhắn'); ?>
 
 <?php $__env->startSection('content'); ?>
-<div class="flex h-full">
+<div class="flex h-full w-full">
 
   
-  <div class="w-80 bg-white border-r border-gray-200 flex flex-col">
+  <div class="w-full md:w-80 bg-white md:border-r border-gray-200 flex flex-col h-full flex-shrink-0">
     
     <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
-      <h2 class="font-semibold text-gray-900">Tin nhắn</h2>
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="openMobileSidebar()" class="md:hidden p-1.5 -ml-1 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition" title="Mở danh mục">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <h2 class="font-semibold text-gray-900">Tin nhắn</h2>
+      </div>
       <a href="<?php echo e(route('groups.create')); ?>"
          class="text-sky-500 hover:text-sky-600 text-xs font-medium flex items-center gap-1">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
@@ -91,7 +96,7 @@
   </div>
 
   
-  <div class="flex-1 flex flex-col items-center justify-center text-gray-400 bg-gray-50">
+  <div class="hidden md:flex flex-1 flex-col items-center justify-center text-gray-400 bg-gray-50">
     <div class="text-center">
       <div class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
         <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>

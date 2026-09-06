@@ -19,12 +19,18 @@ class RedisAuth
         $token = $request->cookie('chat_token') ?? $request->bearerToken();
 
         if (!$token) {
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'error' => 'Vui lòng đăng nhập để tiếp tục.'], 401);
+            }
             return redirect()->route('login')->with('error', 'Vui lòng đăng nhập để tiếp tục.');
         }
 
         $user = $this->auth->validateSession($token);
 
         if (!$user) {
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'error' => 'Phiên đăng nhập đã hết hạn.'], 401);
+            }
             return redirect()->route('login')
                 ->withCookie(cookie()->forget('chat_token'))
                 ->with('error', 'Phiên đăng nhập đã hết hạn.');

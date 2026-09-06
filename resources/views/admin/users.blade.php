@@ -60,12 +60,15 @@
           <tr class="hover:bg-gray-50">
             <td class="px-4 py-3">
               <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-full bg-sky-400 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
-                  {{ strtoupper(substr($user->getName(), 0, 1)) }}
-                </div>
+                @if($user->avatar_url)
+                  <img src="{{ $user->avatar_url }}" class="w-8 h-8 rounded-full object-cover flex-shrink-0">
+                @else
+                  <div class="w-8 h-8 rounded-full bg-sky-400 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
+                    {{ strtoupper(substr($user->getName(), 0, 1)) }}
+                  </div>
+                @endif
                 <div>
                   <p class="text-sm font-medium text-gray-900">{{ $user->getName() }}</p>
-                  <p class="text-xs text-gray-400">@{{ $user->username }}</p>
                 </div>
               </div>
             </td>

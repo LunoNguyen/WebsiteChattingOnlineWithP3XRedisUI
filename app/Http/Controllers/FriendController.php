@@ -29,7 +29,38 @@ class FriendController extends Controller
             if ($u) $blockedUsers[] = $u;
         }
 
-        return view('friends.index', compact('authUser', 'friends', 'requests', 'blockedUsers'));
+        // ── Friend Suggestions (friends-of-friends) ──
+        $myFriendIds = $this->friendRepo->getFriendIds($authUser->user_id);
+        $suggestMap  = [];   // user_id => mutual count
+
+        foreach ($myFriendIds as $friendId) {
+            $friendsOfFriend = $this->friendRepo->getFriendIds($friendId);
+            foreach ($friendsOfFriend as $fof) {
+                if ($fof === $authUser->user_id) continue;                          // skip self
+                if (in_array($fof, $myFriendIds)) continue;                        // already friend
+                if ($this->friendRepo->isBlocked($authUser->user_id, $fof)) continue;  // blocked
+                if ($this->friendRepo->isBlocked($fof, $authUser->user_id)) continue;  // blocked_by
+                $suggestMap[$fof] = ($suggestMap[$fof] ?? 0) + 1;
+            }
+        }
+
+        arsort($suggestMap);   // sort by mutual count descending
+        $suggestions = [];
+        foreach (array_slice(array_keys($suggestMap), 0, 5) as $uid) {
+            $u = $this->users->findById($uid);
+            if ($u) {
+                $hasSent     = $this->friendRepo->hasPendingRequest($authUser->user_id, $uid);
+                $hasReceived = $this->friendRepo->hasPendingRequest($uid, $authUser->user_id);
+                $suggestions[] = [
+                    'user'         => $u,
+                    'mutual'       => $suggestMap[$uid],
+                    'has_sent'     => $hasSent,
+                    'has_received' => $hasReceived,
+                ];
+            }
+        }
+
+        return view('friends.index', compact('authUser', 'friends', 'requests', 'blockedUsers', 'suggestions'));
     }
 
     /** GET — tìm kiếm user để xem hồ sơ trước khi kết bạn */
@@ -198,12 +229,33 @@ class FriendController extends Controller
     public function blockUser(Request $request)
     {
         $authUser = $request->attributes->get('auth_user');
-        $request->validate(['target_id' => 'required|string']);
+        $targetId = $request->target_id;
+
+        if (!$targetId && $request->filled('username')) {
+            $u = $this->users->findByUsername(strtolower(trim($request->username)));
+            $targetId = $u?->user_id;
+        }
+
+        if (!$targetId) {
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'error' => 'Không tìm thấy người dùng để chặn.'], 404);
+            }
+            return back()->with('error', 'Không tìm thấy người dùng để chặn.');
+        }
 
         try {
-            $this->service->blockUser($authUser->user_id, $request->target_id);
-            return back()->with('success', 'Đã chặn người dùng.');
+            $this->service->blockUser($authUser->user_id, $targetId);
+            $targetUser = $this->users->findById($targetId);
+            $msg = "Đã chặn người dùng " . ($targetUser?->getName() ?? '') . ".";
+
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json(['success' => true, 'message' => $msg]);
+            }
+            return back()->with('success', $msg);
         } catch (\RuntimeException $e) {
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'error' => $e->getMessage()], 422);
+            }
             return back()->with('error', $e->getMessage());
         }
     }
@@ -215,7 +267,13 @@ class FriendController extends Controller
         $request->validate(['target_id' => 'required|string']);
 
         $this->service->unblockUser($authUser->user_id, $request->target_id);
-        return back()->with('success', 'Đã bỏ chặn người dùng.');
+        $targetUser = $this->users->findById($request->target_id);
+        $msg = "Đã gỡ chặn thành công cho " . ($targetUser?->getName() ?? 'người dùng') . ".";
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json(['success' => true, 'message' => $msg]);
+        }
+        return back()->with('success', $msg);
     }
 
     /** POST — đặt nickname */

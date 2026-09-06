@@ -53,6 +53,10 @@ class RepositoryServiceProvider extends ServiceProvider
                 $app->make(UserRepository::class),
             )
         );
+
+        $this->app->singleton(\App\Services\MinioStorageService::class, fn() =>
+            new \App\Services\MinioStorageService()
+        );
     }
 
     public function boot(): void {}
