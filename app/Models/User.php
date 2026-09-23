@@ -28,13 +28,29 @@ class User
         $this->display_name = $data['display_name'] ?? '';
         $this->password_hash= $data['password_hash']?? '';
         $this->email        = $data['email']        ?? '';
-        $this->avatar_url   = $data['avatar_url']   ?? '';
+        $this->avatar_url   = self::normalizeUrl($data['avatar_url'] ?? '');
         $this->bio          = $data['bio']           ?? '';
         $this->status       = $data['status']       ?? 'active';
         $this->role         = $data['role']         ?? 'user';
         $this->last_seen    = (int) ($data['last_seen']  ?? 0);
         $this->created_at   = (int) ($data['created_at'] ?? 0);
         $this->is_online    = (int) ($data['is_online']  ?? 0);
+    }
+
+    /**
+     * Chuẩn hóa URL ảnh đại diện:
+     * Nếu URL chứa /files/serve, loại bỏ toàn bộ domain/tunnel (Cloudflare, Ngrok...) để thành relative path
+     */
+    public static function normalizeUrl(?string $url): string
+    {
+        if (empty($url)) return '';
+        if (str_contains($url, 'files/serve')) {
+            $parsed = parse_url($url);
+            $path = $parsed['path'] ?? '/files/serve';
+            $query = !empty($parsed['query']) ? '?' . $parsed['query'] : '';
+            return $path . $query;
+        }
+        return $url;
     }
 
     public function isAdmin(): bool

@@ -274,6 +274,8 @@ class GroupController extends Controller
                 $avatarUrl = $uploaded['url'];
             }
 
+            $avatarUrl = \App\Models\Group::normalizeUrl($avatarUrl);
+
             $updatedGroup = $this->service->updateGroup($authUser->user_id, $groupId, [
                 'name'        => $request->name,
                 'description' => $request->description ?? '',

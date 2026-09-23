@@ -2,10 +2,15 @@
 @section('title', 'Nhóm của tôi')
 
 @section('content')
-<div class="flex-1 overflow-y-auto p-6 bg-gray-50">
+<div class="flex-1 overflow-y-auto p-4 sm:p-6 bg-gray-50">
   <div class="max-w-2xl mx-auto">
     <div class="flex items-center justify-between mb-5">
-      <h2 class="font-semibold text-gray-900 text-lg">👥 Nhóm của tôi</h2>
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="openMobileSidebar()" class="md:hidden p-1.5 -ml-1 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition" title="Mở danh mục">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <h2 class="font-semibold text-gray-900 text-base sm:text-lg">👥 Nhóm của tôi</h2>
+      </div>
       <a href="{{ route('groups.create') }}"
         class="bg-sky-500 hover:bg-sky-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition flex items-center gap-1.5">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>

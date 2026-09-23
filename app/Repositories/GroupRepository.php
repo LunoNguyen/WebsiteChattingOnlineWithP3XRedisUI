@@ -61,6 +61,9 @@ class GroupRepository
     /* ─── Update Group ─── */
     public function update(string $groupId, array $data): bool
     {
+        if (isset($data['avatar_url'])) {
+            $data['avatar_url'] = Group::normalizeUrl($data['avatar_url']);
+        }
         Redis::hMSet($this->groupKey($groupId), $data);
         return true;
     }

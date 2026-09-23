@@ -20,12 +20,28 @@ class Group
     {
         $this->group_id    = $data['group_id']    ?? '';
         $this->name        = $data['name']        ?? '';
-        $this->avatar_url  = $data['avatar_url']  ?? '';
+        $this->avatar_url  = self::normalizeUrl($data['avatar_url'] ?? '');
         $this->owner_id    = $data['owner_id']    ?? '';
         $this->description = $data['description'] ?? '';
         $this->max_members = (int) ($data['max_members'] ?? 50);
         $this->created_at  = (int) ($data['created_at']  ?? 0);
         $this->last_msg_at = (int) ($data['last_msg_at'] ?? 0);
+    }
+
+    /**
+     * Chuẩn hóa URL ảnh đại diện nhóm:
+     * Nếu URL chứa /files/serve, loại bỏ toàn bộ domain/tunnel (Cloudflare, Ngrok...) để thành relative path
+     */
+    public static function normalizeUrl(?string $url): string
+    {
+        if (empty($url)) return '';
+        if (str_contains($url, 'files/serve')) {
+            $parsed = parse_url($url);
+            $path = $parsed['path'] ?? '/files/serve';
+            $query = !empty($parsed['query']) ? '?' . $parsed['query'] : '';
+            return $path . $query;
+        }
+        return $url;
     }
 
     public function toArray(): array

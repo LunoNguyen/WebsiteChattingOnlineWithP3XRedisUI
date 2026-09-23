@@ -84,6 +84,10 @@ class UserRepository
             Redis::set($this->emailIdxKey($fields['email']), $id);
         }
 
+        if (isset($fields['avatar_url'])) {
+            $fields['avatar_url'] = User::normalizeUrl($fields['avatar_url']);
+        }
+
         Redis::hMSet($this->profileKey($id), $fields);
         return true;
     }

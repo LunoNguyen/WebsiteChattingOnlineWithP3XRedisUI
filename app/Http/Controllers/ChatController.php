@@ -145,6 +145,7 @@ class ChatController extends Controller
             $msgArr = $msg->toArray();
             $msgArr['formatted_time'] = \Carbon\Carbon::createFromTimestampMs($msg->created_at)->format('H:i');
             $msgArr['sender_name'] = 'Bạn';
+            $msgArr['sender_avatar'] = $authUser->avatar_url ?? '';
 
             // Thêm thông tin reply nếu có
             if (!empty($msg->reply_to)) {
@@ -200,6 +201,7 @@ class ChatController extends Controller
             $msgArr = $msg->toArray();
             $msgArr['formatted_time'] = \Carbon\Carbon::createFromTimestampMs($msg->created_at)->format('H:i');
             $msgArr['sender_name'] = 'Bạn';
+            $msgArr['sender_avatar'] = $authUser->avatar_url ?? '';
 
             // Thêm thông tin reply nếu có
             if (!empty($msg->reply_to)) {
@@ -337,15 +339,27 @@ class ChatController extends Controller
         ], 200, [], JSON_UNESCAPED_UNICODE);
     }
 
-    /** GET — load thêm tin nhắn cũ (phân trang) */
+    /** GET — load thêm tin nhắn cũ (phân trang DM) */
     public function loadMoreDM(Request $request, string $userId)
     {
         $authUser = $request->attributes->get('auth_user');
         $page = (int) $request->query('page', 2);
         $msgs = $this->chat->getDirectMessages($authUser->user_id, $userId, $page);
 
+        $otherUser = $this->users->findById($userId);
+        $otherName = $otherUser ? $otherUser->getName() : 'Người dùng';
+        $nickname = $this->friends->getNickname($authUser->user_id, $userId);
+        if ($nickname) {
+            $otherName = $nickname;
+        }
+
+        $data = array_map(function ($m) use ($authUser, $otherUser, $otherName) {
+            return $this->formatDmMessage($m, $authUser, $otherUser, $otherName);
+        }, $msgs);
+
         return response()->json([
-            'messages' => array_map(fn($m) => $m->toArray(), $msgs),
+            'success'  => true,
+            'messages' => $data,
             'has_more' => count($msgs) === 20,
         ], 200, [], JSON_UNESCAPED_UNICODE);
     }
@@ -369,47 +383,48 @@ class ChatController extends Controller
             $otherName = $nickname;
         }
 
-        $data = array_map(function ($m) use ($authUser, $otherName) {
-            $arr = $m->toArray();
-            $arr['formatted_time'] = \Carbon\Carbon::createFromTimestampMs($m->created_at)->format('H:i');
-            $arr['sender_name'] = $m->sender_id === $authUser->user_id ? 'Bạn' : $otherName;
-
-            if (!empty($m->reply_to)) {
-                $rep = $this->messages->findById($m->reply_to);
-                if ($rep) {
-                    $arr['reply_sender'] = $rep->sender_id === $authUser->user_id ? 'Bạn' : $otherName;
-                    if ($rep->isDeleted()) {
-                        $arr['reply_content'] = 'Tin nhắn đã bị xóa';
-                    } elseif ($rep->type === 'poll') {
-                        $pd = json_decode($rep->content, true);
-                        $arr['reply_content'] = '[Bình chọn] ' . ($pd['question'] ?? '');
-                    } elseif ($rep->type === 'file') {
-                        $arr['reply_content'] = '[Tệp đính kèm]';
-                    } else {
-                        $arr['reply_content'] = $rep->content;
-                    }
-                }
-            }
-
-            if ($m->type === 'file' && !$m->isDeleted()) {
-                $fd = json_decode($m->content, true) ?: [];
-                if (!empty($fd['object_key'])) {
-                    $fd['url'] = '/files/serve?key=' . urlencode($fd['object_key']);
-                } elseif (!empty($fd['url']) && str_contains($fd['url'], 'files/serve')) {
-                    $parsed = parse_url($fd['url']);
-                    if (!empty($parsed['query'])) {
-                        $fd['url'] = '/files/serve?' . $parsed['query'];
-                    }
-                }
-                $arr['file_data'] = $fd;
-            }
-
-            return $arr;
+        $data = array_map(function ($m) use ($authUser, $otherUser, $otherName) {
+            return $this->formatDmMessage($m, $authUser, $otherUser, $otherName);
         }, $newMsgs);
 
         return response()->json([
             'success'  => true,
             'messages' => $data,
+        ], 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    /** GET — load thêm tin nhắn cũ (phân trang Group) */
+    public function loadMoreGroup(Request $request, string $groupId)
+    {
+        $authUser = $request->attributes->get('auth_user');
+        if (!$this->groups->isMember($groupId, $authUser->user_id)) {
+            return response()->json(['success' => false, 'error' => 'Không phải thành viên'], 403, [], JSON_UNESCAPED_UNICODE);
+        }
+
+        $page = (int) $request->query('page', 2);
+        $msgs = $this->chat->getGroupMessages($groupId, $authUser->user_id, $page);
+
+        $groupInfo = $this->groupService->getGroupWithMembers($groupId);
+        $nicknames = [];
+        $names = [];
+        $avatars = [];
+        if ($groupInfo) {
+            foreach ($groupInfo['members'] as $m) {
+                $uid = $m['user']->user_id;
+                $nicknames[$uid] = $m['nickname'] ?: $m['user']->getName();
+                $names[$uid] = $m['user']->getName();
+                $avatars[$uid] = $m['user']->avatar_url ?? '';
+            }
+        }
+
+        $data = array_map(function ($m) use ($authUser, $nicknames, $names, $avatars) {
+            return $this->formatGroupMessage($m, $authUser, $nicknames, $names, $avatars);
+        }, $msgs);
+
+        return response()->json([
+            'success'  => true,
+            'messages' => $data,
+            'has_more' => count($msgs) === 20,
         ], 200, [], JSON_UNESCAPED_UNICODE);
     }
 
@@ -429,57 +444,109 @@ class ChatController extends Controller
         $groupInfo = $this->groupService->getGroupWithMembers($groupId);
         $nicknames = [];
         $names = [];
+        $avatars = [];
         if ($groupInfo) {
             foreach ($groupInfo['members'] as $m) {
                 $uid = $m['user']->user_id;
                 $nicknames[$uid] = $m['nickname'] ?: $m['user']->getName();
                 $names[$uid] = $m['user']->getName();
+                $avatars[$uid] = $m['user']->avatar_url ?? '';
             }
         }
 
-        $data = array_map(function ($m) use ($authUser, $nicknames, $names) {
-            $arr = $m->toArray();
-            $arr['formatted_time'] = \Carbon\Carbon::createFromTimestampMs($m->created_at)->format('H:i');
-            $arr['sender_name'] = $m->sender_id === $authUser->user_id ? 'Bạn' : ($nicknames[$m->sender_id] ?? ($names[$m->sender_id] ?? 'Thành viên'));
-
-            if (!empty($m->reply_to)) {
-                $rep = $this->messages->findById($m->reply_to);
-                if ($rep) {
-                    $repSender = $rep->sender_id === $authUser->user_id ? 'Bạn' : ($nicknames[$rep->sender_id] ?? ($names[$rep->sender_id] ?? 'Thành viên'));
-                    $arr['reply_sender'] = $repSender;
-                    if ($rep->isDeleted()) {
-                        $arr['reply_content'] = 'Tin nhắn đã bị xóa';
-                    } elseif ($rep->type === 'poll') {
-                        $pd = json_decode($rep->content, true);
-                        $arr['reply_content'] = '[Bình chọn] ' . ($pd['question'] ?? '');
-                    } elseif ($rep->type === 'file') {
-                        $arr['reply_content'] = '[Tệp đính kèm]';
-                    } else {
-                        $arr['reply_content'] = $rep->content;
-                    }
-                }
-            }
-
-            if ($m->type === 'file' && !$m->isDeleted()) {
-                $fd = json_decode($m->content, true) ?: [];
-                if (!empty($fd['object_key'])) {
-                    $fd['url'] = '/files/serve?key=' . urlencode($fd['object_key']);
-                } elseif (!empty($fd['url']) && str_contains($fd['url'], 'files/serve')) {
-                    $parsed = parse_url($fd['url']);
-                    if (!empty($parsed['query'])) {
-                        $fd['url'] = '/files/serve?' . $parsed['query'];
-                    }
-                }
-                $arr['file_data'] = $fd;
-            }
-
-            return $arr;
+        $data = array_map(function ($m) use ($authUser, $nicknames, $names, $avatars) {
+            return $this->formatGroupMessage($m, $authUser, $nicknames, $names, $avatars);
         }, $newMsgs);
 
         return response()->json([
             'success'  => true,
             'messages' => $data,
         ], 200, [], JSON_UNESCAPED_UNICODE);
+    }
+
+    /** Helper format tin nhắn DM */
+    private function formatDmMessage($m, $authUser, $otherUser, $otherName): array
+    {
+        $arr = $m->toArray();
+        $arr['formatted_time'] = \Carbon\Carbon::createFromTimestampMs($m->created_at)->format('H:i');
+        $isMine = $m->sender_id === $authUser->user_id;
+        $arr['sender_name'] = $isMine ? 'Bạn' : $otherName;
+        $arr['sender_avatar'] = $isMine ? ($authUser->avatar_url ?? '') : ($otherUser ? ($otherUser->avatar_url ?? '') : '');
+
+        if (!empty($m->reply_to)) {
+            $rep = $this->messages->findById($m->reply_to);
+            if ($rep) {
+                $arr['reply_sender'] = $rep->sender_id === $authUser->user_id ? 'Bạn' : $otherName;
+                if ($rep->isDeleted()) {
+                    $arr['reply_content'] = 'Tin nhắn đã bị xóa';
+                } elseif ($rep->type === 'poll') {
+                    $pd = json_decode($rep->content, true);
+                    $arr['reply_content'] = '[Bình chọn] ' . ($pd['question'] ?? '');
+                } elseif ($rep->type === 'file') {
+                    $arr['reply_content'] = '[Tệp đính kèm]';
+                } else {
+                    $arr['reply_content'] = $rep->content;
+                }
+            }
+        }
+
+        if ($m->type === 'file' && !$m->isDeleted()) {
+            $fd = json_decode($m->content, true) ?: [];
+            if (!empty($fd['object_key'])) {
+                $fd['url'] = '/files/serve?key=' . urlencode($fd['object_key']);
+            } elseif (!empty($fd['url']) && str_contains($fd['url'], 'files/serve')) {
+                $parsed = parse_url($fd['url']);
+                if (!empty($parsed['query'])) {
+                    $fd['url'] = '/files/serve?' . $parsed['query'];
+                }
+            }
+            $arr['file_data'] = $fd;
+        }
+
+        return $arr;
+    }
+
+    /** Helper format tin nhắn Group */
+    private function formatGroupMessage($m, $authUser, $nicknames, $names, $avatars): array
+    {
+        $arr = $m->toArray();
+        $arr['formatted_time'] = \Carbon\Carbon::createFromTimestampMs($m->created_at)->format('H:i');
+        $isMine = $m->sender_id === $authUser->user_id;
+        $arr['sender_name'] = $isMine ? 'Bạn' : ($nicknames[$m->sender_id] ?? ($names[$m->sender_id] ?? 'Thành viên'));
+        $arr['sender_avatar'] = $isMine ? ($authUser->avatar_url ?? '') : ($avatars[$m->sender_id] ?? '');
+
+        if (!empty($m->reply_to)) {
+            $rep = $this->messages->findById($m->reply_to);
+            if ($rep) {
+                $repSender = $rep->sender_id === $authUser->user_id ? 'Bạn' : ($nicknames[$rep->sender_id] ?? ($names[$rep->sender_id] ?? 'Thành viên'));
+                $arr['reply_sender'] = $repSender;
+                if ($rep->isDeleted()) {
+                    $arr['reply_content'] = 'Tin nhắn đã bị xóa';
+                } elseif ($rep->type === 'poll') {
+                    $pd = json_decode($rep->content, true);
+                    $arr['reply_content'] = '[Bình chọn] ' . ($pd['question'] ?? '');
+                } elseif ($rep->type === 'file') {
+                    $arr['reply_content'] = '[Tệp đính kèm]';
+                } else {
+                    $arr['reply_content'] = $rep->content;
+                }
+            }
+        }
+
+        if ($m->type === 'file' && !$m->isDeleted()) {
+            $fd = json_decode($m->content, true) ?: [];
+            if (!empty($fd['object_key'])) {
+                $fd['url'] = '/files/serve?key=' . urlencode($fd['object_key']);
+            } elseif (!empty($fd['url']) && str_contains($fd['url'], 'files/serve')) {
+                $parsed = parse_url($fd['url']);
+                if (!empty($parsed['query'])) {
+                    $fd['url'] = '/files/serve?' . $parsed['query'];
+                }
+            }
+            $arr['file_data'] = $fd;
+        }
+
+        return $arr;
     }
 
     /** GET — Polling đồng bộ trạng thái toàn cục mỗi 10 giây (dùng chung cho chat, friends, group, profile) */

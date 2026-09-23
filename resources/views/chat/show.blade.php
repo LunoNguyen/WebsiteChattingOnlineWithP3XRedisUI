@@ -171,6 +171,16 @@
 
   {{-- ── Messages Area ── --}}
   <div id="messages-container" class="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-gray-50">
+    {{-- Load more older messages button container --}}
+    <div id="load-more-container" class="text-center py-1 {{ count($messages) < 20 ? 'hidden' : '' }}">
+      <button type="button" id="btn-load-more" onclick="loadOlderMessages()"
+        class="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 hover:text-sky-600 rounded-full text-xs font-medium shadow-2xs transition">
+        <svg id="load-more-icon" class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+        <svg id="load-more-spinner" class="hidden animate-spin w-3.5 h-3.5 text-sky-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+        <span id="load-more-text">Tải thêm tin nhắn cũ</span>
+      </button>
+    </div>
+
     <div id="empty-state" class="{{ count($messages) > 0 ? 'hidden' : '' }} text-center text-gray-400 text-sm py-16">
       <p>Chưa có tin nhắn nào. Bắt đầu cuộc trò chuyện bằng tin nhắn đầu tiên.</p>
     </div>
@@ -495,6 +505,11 @@ const DEL_BASE   = '/message/';
 const AUTH_USER_ID      = '{{ $authUser->user_id }}';
 const OTHER_USER_NAME   = '{{ addslashes($nickname ?: $otherUser->getName()) }}';
 const MY_NAME           = '{{ addslashes($authUser->getName()) }}';
+const MY_AVATAR         = '{{ addslashes($authUser->avatar_url ?? "") }}';
+const OTHER_AVATAR      = '{{ addslashes($otherUser->avatar_url ?? "") }}';
+const MY_INITIAL        = '{{ addslashes(strtoupper(substr($authUser->getName(), 0, 1))) }}';
+const OTHER_INITIAL     = '{{ addslashes(strtoupper(substr($nickname ?: $otherUser->getName(), 0, 1))) }}';
+const MORE_URL          = '{{ route("chat.dm.more", $otherUser->user_id, false) }}';
 
 const msgContainer = document.getElementById('messages-container');
 const inputEl      = document.getElementById('message-input');
@@ -700,10 +715,10 @@ function formatBytes(bytes) {
   return (bytes/1048576).toFixed(1) + ' MB';
 }
 
-// ── Append message directly to DOM ──
-function appendMessageRow(msg, isMine) {
-  if (emptyState) emptyState.classList.add('hidden');
-  if (document.getElementById(`msg-row-${msg.msg_id}`)) return;
+// ── Create message row DOM element ──
+function createMessageRowElement(msg, isMine) {
+  if (!msg || !msg.msg_id) return null;
+  if (document.getElementById(`msg-row-${msg.msg_id}`)) return null;
 
   // Tin nhắn hệ thống (bình chọn, thông báo)
   if (msg.type === 'system' || msg.sender_id === 'system') {
@@ -718,9 +733,7 @@ function appendMessageRow(msg, isMine) {
         <span class="font-medium leading-relaxed">${escapeHtml(msg.content)}</span>
         ${timeStr ? `<span class="text-[10px] text-sky-400 ml-1 flex-shrink-0">${escapeHtml(timeStr)}</span>` : ''}
       </div>`;
-    msgContainer.appendChild(sysDiv);
-    msgContainer.scrollTop = msgContainer.scrollHeight;
-    return;
+    return sysDiv;
   }
 
   const div = document.createElement('div');
@@ -734,9 +747,25 @@ function appendMessageRow(msg, isMine) {
   const timeStr = msg.formatted_time || 'Vừa xong';
   const senderDisplayName = isMine ? 'Bạn' : (msg.sender_name || OTHER_USER_NAME);
 
-  // Avatar HTML
-  const otherAvatarHtml = `<div class="flex-shrink-0 self-end mb-1"><div class="w-8 h-8 rounded-full bg-sky-500 flex items-center justify-center text-white font-bold text-xs">${escapeHtml(OTHER_USER_NAME.charAt(0).toUpperCase())}</div></div>`;
-  const myAvatarHtml    = `<div class="flex-shrink-0 self-end mb-1"><div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold text-xs">${escapeHtml(MY_NAME.charAt(0).toUpperCase())}</div></div>`;
+  // Avatar rendering: use avatar image if exists, fallback to initial
+  const senderAvatar = isMine ? MY_AVATAR : (msg.sender_avatar || OTHER_AVATAR);
+  const senderInitial = isMine ? MY_INITIAL : OTHER_INITIAL;
+
+  const otherAvatarHtml = `
+    <div class="flex-shrink-0 self-end mb-1">
+      ${senderAvatar
+        ? `<img src="${escapeHtml(senderAvatar)}" class="w-8 h-8 rounded-full object-cover">`
+        : `<div class="w-8 h-8 rounded-full bg-sky-500 flex items-center justify-center text-white font-bold text-xs">${escapeHtml(senderInitial)}</div>`
+      }
+    </div>`;
+
+  const myAvatarHtml = `
+    <div class="flex-shrink-0 self-end mb-1">
+      ${MY_AVATAR
+        ? `<img src="${escapeHtml(MY_AVATAR)}" class="w-8 h-8 rounded-full object-cover">`
+        : `<div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold text-xs">${escapeHtml(MY_INITIAL)}</div>`
+      }
+    </div>`;
 
   // Actions panel HTML (beside the bubble in empty space, NEVER covers message)
   const actionsHtml = `
@@ -877,8 +906,90 @@ function appendMessageRow(msg, isMine) {
     ${isMine ? myAvatarHtml : ''}
   `;
 
+  return div;
+}
+
+// ── Append message directly to DOM ──
+function appendMessageRow(msg, isMine) {
+  if (emptyState) emptyState.classList.add('hidden');
+  const div = createMessageRowElement(msg, isMine);
+  if (!div) return;
   msgContainer.appendChild(div);
   msgContainer.scrollTop = msgContainer.scrollHeight;
+}
+
+// ── Load older messages (Pagination) ──
+let currentOlderPage = 2;
+let isLoadingOlder   = false;
+let hasMoreOlder     = {{ count($messages) >= 20 ? 'true' : 'false' }};
+
+async function loadOlderMessages() {
+  if (isLoadingOlder || !hasMoreOlder) return;
+  isLoadingOlder = true;
+
+  const btn     = document.getElementById('btn-load-more');
+  const icon    = document.getElementById('load-more-icon');
+  const spinner = document.getElementById('load-more-spinner');
+  const text    = document.getElementById('load-more-text');
+  const container = document.getElementById('load-more-container');
+
+  if (icon) icon.classList.add('hidden');
+  if (spinner) spinner.classList.remove('hidden');
+  if (text) text.textContent = 'Đang tải tin nhắn...';
+
+  const prevScrollHeight = msgContainer.scrollHeight;
+  const prevScrollTop    = msgContainer.scrollTop;
+
+  try {
+    const res = await fetch(`${MORE_URL}?page=${currentOlderPage}`, {
+      headers: { 'Accept': 'application/json' }
+    });
+    const data = await res.json();
+
+    if (data.messages && data.messages.length > 0) {
+      const fragment = document.createDocumentFragment();
+      data.messages.forEach(m => {
+        const row = createMessageRowElement(m, m.sender_id === AUTH_USER_ID);
+        if (row) fragment.appendChild(row);
+      });
+
+      if (container && container.nextSibling) {
+        msgContainer.insertBefore(fragment, container.nextSibling);
+      } else {
+        msgContainer.prepend(fragment);
+      }
+
+      msgContainer.scrollTop = msgContainer.scrollHeight - prevScrollHeight + prevScrollTop;
+      currentOlderPage++;
+    }
+
+    if (!data.has_more || !data.messages || data.messages.length === 0) {
+      hasMoreOlder = false;
+      if (container) {
+        container.innerHTML = '<span class="text-[11px] text-gray-400 italic">Đã hiển thị toàn bộ tin nhắn</span>';
+        setTimeout(() => { if (container) container.classList.add('hidden'); }, 3000);
+      }
+    } else {
+      if (icon) icon.classList.remove('hidden');
+      if (spinner) spinner.classList.add('hidden');
+      if (text) text.textContent = 'Tải thêm tin nhắn cũ';
+    }
+  } catch (e) {
+    console.error('Error loading older messages:', e);
+    if (icon) icon.classList.remove('hidden');
+    if (spinner) spinner.classList.add('hidden');
+    if (text) text.textContent = 'Lỗi tải, thử lại';
+  } finally {
+    isLoadingOlder = false;
+  }
+}
+
+if (msgContainer) {
+  msgContainer.addEventListener('scroll', () => {
+    if (msgContainer.scrollTop <= 20 && hasMoreOlder && !isLoadingOlder) {
+      loadOlderMessages();
+    }
+  });
 }
 
 function escapeHtml(text) {

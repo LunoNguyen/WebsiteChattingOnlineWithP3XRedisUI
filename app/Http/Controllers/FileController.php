@@ -59,6 +59,7 @@ class FileController extends Controller
             $msgArr = $msg->toArray();
             $msgArr['formatted_time'] = \Carbon\Carbon::createFromTimestampMs($msg->created_at)->format('H:i');
             $msgArr['sender_name']    = 'Bạn';
+            $msgArr['sender_avatar']  = $authUser->avatar_url ?? '';
             $msgArr['file_data']      = $uploaded;
 
             // Xử lý thông tin reply preview nếu có
@@ -134,6 +135,7 @@ class FileController extends Controller
             $msgArr = $msg->toArray();
             $msgArr['formatted_time'] = \Carbon\Carbon::createFromTimestampMs($msg->created_at)->format('H:i');
             $msgArr['sender_name']    = 'Bạn';
+            $msgArr['sender_avatar']  = $authUser->avatar_url ?? '';
             $msgArr['file_data']      = $uploaded;
 
             if (!empty($msg->reply_to)) {

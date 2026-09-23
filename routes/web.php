@@ -41,6 +41,7 @@ Route::middleware('redis.auth')->group(function () {
     Route::post('/chat/group/{groupId}/file', [\App\Http\Controllers\FileController::class, 'uploadGroup'])->name('chat.group.file');
     Route::post('/chat/group/{groupId}/send/file', [\App\Http\Controllers\FileController::class, 'uploadGroup']);
     Route::get('/chat/group/{groupId}/new',   [ChatController::class, 'getNewGroup'])->name('chat.group.new');
+    Route::get('/chat/group/{groupId}/more',  [ChatController::class, 'loadMoreGroup'])->name('chat.group.more');
     Route::get('/chat/status-poll',           [ChatController::class, 'pollStatus'])->name('chat.status.poll');
 
     /* File Serving */

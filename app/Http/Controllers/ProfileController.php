@@ -43,6 +43,8 @@ class ProfileController extends Controller
             }
         }
 
+        $avatarUrl = \App\Models\User::normalizeUrl($avatarUrl);
+
         $this->users->update($authUser->user_id, [
             'display_name' => $request->display_name,
             'bio'          => $request->bio ?? '',

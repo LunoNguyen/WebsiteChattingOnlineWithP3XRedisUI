@@ -2,8 +2,18 @@
 @section('title', 'Bạn bè')
 
 @section('content')
-<div class="flex-1 overflow-y-auto p-6 bg-gray-50">
+<div class="flex-1 overflow-y-auto p-4 sm:p-6 bg-gray-50">
   <div class="max-w-3xl mx-auto space-y-6">
+
+    {{-- Mobile header with menu toggle --}}
+    <div class="md:hidden flex items-center justify-between pb-2 border-b border-gray-200">
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="openMobileSidebar()" class="p-1.5 -ml-1 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition" title="Mở danh mục">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <h1 class="font-semibold text-gray-900 text-sm">Bạn bè</h1>
+      </div>
+    </div>
 
     {{-- Alerts --}}
     @if(session('success'))
